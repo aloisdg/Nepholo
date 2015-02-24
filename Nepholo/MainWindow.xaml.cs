@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Resources;
+using DropNetRT;
 
 namespace Nepholo
 {
@@ -20,16 +22,10 @@ namespace Nepholo
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
-
-            Loaded += MainWindow_Loaded;
-        }
-
-        void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
