@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DropNetRT;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,10 @@ namespace Nepholo
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        const string AppKey = "kmsbiphcke0p55v";
+        const string AppSecret = "i4qie7qbfrz94k9";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -29,7 +34,7 @@ namespace Nepholo
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
+            var _client = new DropNetClient("API KEY", "API SECRET");
         }
     }
 }
