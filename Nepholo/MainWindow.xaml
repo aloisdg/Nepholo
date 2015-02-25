@@ -4,10 +4,9 @@
         Title="MainWindow" Height="1280" Width="720"
         DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}">
     <Grid>
-
         <StackPanel>
-            <TextBox Text="" />
-            <PasswordBox  />
+            <TextBox x:Name="Path" />
+            <Button Content="Read" Click="Button_Click2" />
             <Button Content="Connect" Click="Button_Click" />
             <WebBrowser Name="MainBrowser" Height="434" Width="Auto" />
         </StackPanel>
