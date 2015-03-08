@@ -42,7 +42,7 @@ namespace Nepholo
         {
             InitializeComponent();
 
-            _client = new DropNetClient(AppResource.AppKey, AppResource.AppSecret) { UseSandbox = false };
+            _client = new DropNetClient(ApiResource.AppKey, ApiResource.AppSecret) { UseSandbox = false };
             if (!(String.IsNullOrWhiteSpace(Settings.Default.Token)
                 || String.IsNullOrWhiteSpace(Settings.Default.Secret)))
             {

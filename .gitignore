@@ -154,7 +154,3 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
-
-# Ignore Api key File
-ApiResource.resx
-ApiResource.Designer.cs
