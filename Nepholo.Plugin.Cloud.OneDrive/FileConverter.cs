@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OneDriveRestAPI.Model;
 
 namespace Nepholo.Plugin.Cloud.OneDrive
 {
@@ -51,6 +52,21 @@ namespace Nepholo.Plugin.Cloud.OneDrive
             var place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
             var num = Math.Round(bytes / Math.Pow(1024, place), 1);
             return (Math.Sign(byteCount) * num) + suf[place];
+        }
+
+        public static Account ToAccount(this User info, UserQuota quota)
+        {
+             return new Account
+            {
+                Storage = new Storage
+                {
+                    Total = quota.Quota,
+                    Remaining = quota.Available,
+                    Used = quota.Quota - quota.Available
+                },
+                Email = info.Emails != null ? info.Emails.Preferred : String.Empty,
+                Name = info.Name
+            };
         }
     }
 }

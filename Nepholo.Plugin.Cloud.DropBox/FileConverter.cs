@@ -34,6 +34,21 @@ namespace Nepholo.Plugin.Cloud.DropBox
             return neo;
         }
 
+        public static Account ToAccount(this AccountInfo accountInfo)
+        {
+            return new Account
+            {
+                Storage = new Storage
+                {
+                    Total = accountInfo.quota_info.quota,
+                    Used = accountInfo.quota_info.normal,
+                    Remaining = accountInfo.quota_info.quota - accountInfo.quota_info.normal
+                },
+                Email = accountInfo.email,
+                Name = accountInfo.display_name
+            };
+        }
+
         // http://stackoverflow.com/a/16830804
     }
 }

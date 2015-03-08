@@ -82,9 +82,18 @@ namespace Nepholo.Plugin.Cloud.OneDrive
             return folderContent.ToFiles();
         }
 
-        public void Identify()
+        public async Task<Account> Identify()
         {
-            throw new NotImplementedException();
+            var quota = await _client.QuotaAsync();
+            Console.WriteLine(quota.Quota);
+            var info = await _client.GetMeAsync();
+            Console.WriteLine(info.Name);
+
+
+
+
+
+            return info.ToAccount(quota);
         }
     }
 }

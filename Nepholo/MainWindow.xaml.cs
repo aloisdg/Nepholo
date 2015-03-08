@@ -91,7 +91,6 @@ namespace Nepholo
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             FillClouds();
-            //SwitchCloud();
         }
 
 
@@ -104,9 +103,7 @@ namespace Nepholo
             wb.LoadCompleted += wb_LoadCompleted;
             wb.Navigate(url);
 
-            _window = new Window { ShowInTaskbar = false, Title = "Authentification" };
-            _window.Content = wb;
-            _window.Owner = this;
+            _window = new Window { ShowInTaskbar = false, Title = "Authentification", Content = wb, Owner = this};
             _window.Closing += w_Closing;
             _window.Show();
         }
@@ -116,8 +113,8 @@ namespace Nepholo
             _cloudType = GetICloud.Where(element => element.Value != null).Select(e => e.Value);
 
             CloudBox.ItemsSource = _cloudType;
-            CloudBox.SelectedIndex = 0;
-            _cloud = _cloudType.First();
+            CloudBox.SelectedIndex = 1;
+            //_cloud = _cloudType.Last();
         }
 
         private async void wb_LoadCompleted(object sender, NavigationEventArgs e)
@@ -134,6 +131,14 @@ namespace Nepholo
         {
             IsEnabled = true;
             CloudBox.IsEnabled = true;
+
+            Test();
+        }
+
+        private async void Test()
+        {
+            var a = await _cloud.Identify();
+            Console.WriteLine(a.Email);
         }
 
         private async void GetTree(string path, TreeViewItem item = null)
@@ -177,9 +182,7 @@ namespace Nepholo
                 item.Items.Add(_dummyNode);
                 item.Expanded += ExpandFolder;
                 if (tvi == null)
-                {
                     FoldersItem.Items.Add(item);
-                }
                 else
                     tvi.Items.Add(item);
             }
@@ -194,7 +197,10 @@ namespace Nepholo
             {
                 GetTree(item.Tag.ToString(), item);
             }
-            catch (Exception) { }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
 
         private void foldersItem_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

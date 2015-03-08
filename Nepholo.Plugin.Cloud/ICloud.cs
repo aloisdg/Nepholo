@@ -36,6 +36,6 @@ namespace Nepholo.Plugin.Cloud
         Task<List<File>> GetFolder(string id);
 
         // Get user's informations
-        void Identify();
+        Task<Account> Identify();
     }
 }

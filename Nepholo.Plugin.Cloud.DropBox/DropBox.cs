@@ -90,9 +90,17 @@ namespace Nepholo.Plugin.Cloud.DropBox
             });
         }
 
-        public void Identify()
+        public Task<Account> Identify()
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                var accountInfo = _client.AccountInfo();
+                Console.WriteLine(accountInfo.display_name);
+                Console.WriteLine(accountInfo.email);
+                Console.WriteLine(accountInfo.quota_info);
+
+                return accountInfo.ToAccount();
+            });
         }
     }
 }
