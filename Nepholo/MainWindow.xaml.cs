@@ -134,46 +134,15 @@ namespace Nepholo
 
         private async void GetTree(string path, TreeViewItem item = null)
         {
-            //List<File> list;
-            //if (String.IsNullOrWhiteSpace(path))
-            //    list = _cloud.GetRoot().Result;
-            //else
 
-//#pragma warning disable 1998
-//            var a = await _cloud.GetFolder(path).ContinueWith(async t =>
-//#pragma warning restore 1998
-//            {
-//                //Dispatcher.BeginInvoke(new ThreadStart(() =>
-//                //{
-//                var list = await t;
-//                InitTree(from folder in list
-//                         where folder.IsFolder
-//                         select folder, item);
-//                //}));
-//            });
             List<File> list;
             if (String.IsNullOrWhiteSpace(path))
                 list = await _cloud.GetRoot();
             else
                 list = await _cloud.GetFolder(path);
 
-            //InitTree(from folder in list
-            //         where folder.IsFolder
-            //         select folder, item);
-
             InitTree(list.Where(f => f.IsFolder), item);
 
-            //.ContinueWith(async t =>
-            //{
-            //    //Dispatcher.BeginInvoke(new ThreadStart(() =>
-            //    //{
-            //    var list = await t;
-            //    InitTree(from folder in list
-            //             where folder.IsFolder
-            //             select folder, item);
-            //    //}));
-            //});
-            //a.Wait();
         }
 
         private async void DisplayContents(string path)
