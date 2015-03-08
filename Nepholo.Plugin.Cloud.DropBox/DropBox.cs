@@ -12,29 +12,20 @@ namespace Nepholo.Plugin.Cloud.DropBox
 {
     public class DropBox : ICloud
     {
-        private readonly DropNetClient _client = new DropNetClient(ApiKeys.DropKey, ApiKeys.DropSecret) { UseSandbox = false };
-        private UserLogin _userLogin;
+        private readonly DropNetClient _client =
+            new DropNetClient(ApiKeys.DropKey, ApiKeys.DropSecret) { UseSandbox = false };
 
         public string GetOAuthToken()
         {
-            //_client.GetTokenAsync(userLogin =>
-            //{
-            //    //Dispatcher.BeginInvoke(new ThreadStart(() =>
-            //    //{
-            //    //    WebPanel.Visibility = Visibility.Visible;
-            //    //    WebPanel.IsHitTestVisible = true;
-            //    //    MainBrowser.LoadCompleted += MainBrowser_LoadCompleted;
-            //    //    MainBrowser.Navigate(tokenurl);
-            //    //}));
-            //},
-            //error =>
-            //{
-            //    Console.WriteLine(error.Message);
-            //});
-
             _client.GetToken();
             var tokenUrl = _client.BuildAuthorizeUrl("http://aloisdg.github.io/Nepholo/");
             return tokenUrl;
+        }
+
+        public void Create(string url)
+        {
+            var accessToken = _client.GetAccessToken();
+            _client.UserLogin = accessToken;
 
             //// step 3
             //_client.GetAccessTokenAsync((accessToken) =>
@@ -44,32 +35,7 @@ namespace Nepholo.Plugin.Cloud.DropBox
             //(error) =>
             //{
             //    //Handle error
-
             //});
-        }
-
-        public void Create(string url)
-        {
-            //_client.GetAccessTokenAsync(userLogin =>
-            //{
-            //    _userLogin = userLogin;
-
-            //    //if ((MessageBox.Show("Save password?", "Important Question", MessageBoxButton.YesNo)) == MessageBoxResult.Yes)
-            //    //{
-            //    //    Settings.Default.Token = userLogin.Token;
-            //    //    Settings.Default.Secret = userLogin.Secret;
-            //    //    Settings.Default.Save();
-            //    //}
-            //    //GetTree("/");
-            //    //DisplayContents("/");
-            //},
-            //error =>
-            //{
-            //    Console.WriteLine(error.Message);
-            //});
-            var accessToken = _client.GetAccessToken();
-            _client.UserLogin = accessToken;
-
         }
 
         public void Connect()
@@ -116,43 +82,11 @@ namespace Nepholo.Plugin.Cloud.DropBox
 
         public Task<List<File>> GetFolder(string id)
         {
-            //MetaData md = new MetaData();
-
-            //    _client.GetMetaDataAsync(id,
-            //        metaData =>
-            //        {
-            //            md = metaData;
-            //            //Do something with MetaData
-            //        },
-            //        error =>
-            //        {
-            //            Console.WriteLine(error.Message);
-            //        });
-
-            //md = _client.GetMetaData(id);
-            //return md.Contents.ToFiles();
-
-            //var result = await Extensions.AsAsync<List<MetaData>>(GetMetaDataAsync);
-            //return result;
             return Task.Run(() =>
             {
                 var result = _client.GetMetaData(id);
                 return result.Contents.ToFiles();
             });
-        }
-
-        Task<T> AsAsync<T>(Action<Action<T>> target)
-        {
-            var tcs = new TaskCompletionSource<T>();
-            try
-            {
-                target(t => tcs.SetResult(t));
-            }
-            catch (Exception ex)
-            {
-                tcs.SetException(ex);
-            }
-            return tcs.Task;
         }
 
         public void Identify()
@@ -170,15 +104,17 @@ namespace Nepholo.Plugin.Cloud.DropBox
 
         public static File ToFile(this MetaData file)
         {
-            var neo = new File();
-            neo.Id = file.Path;
-            neo.Name = file.Name;
-            neo.IsFolder = file.Is_Dir;
-            neo.Size = file.Size;
-            neo.Type = file.Icon;
-            neo.Path = file.Path;
-            neo.Icon = "https://www.dropbox.com/static/images/icons64/" + file.Icon + ".png";
-            neo.ModifiedDate = file.ModifiedDate;
+            var neo = new File
+            {
+                Id = file.Path,
+                Name = file.Name,
+                IsFolder = file.Is_Dir,
+                Size = file.Size,
+                Type = file.Icon,
+                Path = file.Path,
+                Icon = "https://www.dropbox.com/static/images/icons64/" + file.Icon + ".png",
+                ModifiedDate = file.ModifiedDate
+            };
             if (file.Contents == null || !file.Contents.Any())
             {
                 neo.Files = null;
