@@ -65,6 +65,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ApiKeys.resx</DependentUpon>
     </Compile>
+    <Compile Include="FileConverter.cs" />
     <Compile Include="OneDrive.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

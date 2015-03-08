@@ -15,7 +15,7 @@ namespace Nepholo.Plugin.Cloud
         string GetOAuthToken();
 
         // Initialize a new Cloud for the first time
-        void Create(string url);
+        Task Create(string url);
 
         // Initialize a new Client with nothing
         void Connect();

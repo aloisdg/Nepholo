@@ -52,6 +52,7 @@
       <DependentUpon>ApiKeys.resx</DependentUpon>
     </Compile>
     <Compile Include="DropBox.cs" />
+    <Compile Include="FileConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
