@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Resources;
 using DropNet;
 using DropNet.Models;
-using System.Threading;
-using System.Security.Cryptography;
+using MahApps.Metro.Controls;
+using Nepholo.Properties;
 
 namespace Nepholo
 {
@@ -28,6 +20,10 @@ namespace Nepholo
     // https://www.behance.net/gallery/20572615/Dropbox-Material-Design-2014
     // https://www.behance.net/gallery/23330969/Dropbox-Desktop
 
+    // logo
+    // icon by Ben
+    // http://thenounproject.com/term/cloud/42868/
+
     // doc
     // http://dkdevelopment.net/what-im-doing/dropnet/
     // https://github.com/DropNet/DropNet
@@ -36,7 +32,7 @@ namespace Nepholo
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         readonly DropNetClient _client;
         private UserLogin _userLogin;
@@ -46,18 +42,17 @@ namespace Nepholo
         {
             InitializeComponent();
 
-            _client = new DropNetClient(AppResource.AppKey, AppResource.AppSecret);
-            _client.UseSandbox = false;
-
-            if (!(String.IsNullOrWhiteSpace(Properties.Settings.Default.Token)
-                || String.IsNullOrWhiteSpace(Properties.Settings.Default.Secret)))
+            _client = new DropNetClient(AppResource.AppKey, AppResource.AppSecret) { UseSandbox = false };
+            if (!(String.IsNullOrWhiteSpace(Settings.Default.Token)
+                || String.IsNullOrWhiteSpace(Settings.Default.Secret)))
             {
                 _client.UserLogin = new UserLogin
                 {
-                    Token = Properties.Settings.Default.Token,
-                    Secret = Properties.Settings.Default.Secret
+                    Token = Settings.Default.Token,
+                    Secret = Settings.Default.Secret
                 };
-                LoadContents();
+                GetTree("/");
+                DisplayContents("/");
             }
             else
             {
@@ -65,26 +60,20 @@ namespace Nepholo
             }
         }
 
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Connect();
-        }
-
         void Connect()
         {
-            // step 1
-            _client.GetTokenAsync((userLogin) =>
+            _client.GetTokenAsync(userLogin =>
             {
-                // step 2
                 var tokenurl = _client.BuildAuthorizeUrl("http://www.google.com.au");
                 Dispatcher.BeginInvoke(new ThreadStart(() =>
                 {
-                    this.MainBrowser.LoadCompleted += MainBrowser_LoadCompleted;
-                    this.MainBrowser.Navigate(tokenurl);
+                    WebPanel.Visibility = Visibility.Visible;
+                    WebPanel.IsHitTestVisible = true;
+                    MainBrowser.LoadCompleted += MainBrowser_LoadCompleted;
+                    MainBrowser.Navigate(tokenurl);
                 }));
             },
-            (error) =>
+            error =>
             {
                 Console.WriteLine(error.Message);
             });
@@ -102,81 +91,129 @@ namespace Nepholo
 
         void MainBrowser_LoadCompleted(object sender, NavigationEventArgs e)
         {
-            if (e.Uri.Host.Contains("google"))
+            if (!e.Uri.Host.Contains("google")) return;
+            Dispatcher.BeginInvoke(new ThreadStart(() =>
             {
-                Dispatcher.BeginInvoke(new ThreadStart(() =>
+                WebPanel.Visibility = Visibility.Collapsed;
+                WebPanel.IsHitTestVisible = false;
+            }));
+
+            _client.GetAccessTokenAsync(userLogin =>
+            {
+                _userLogin = userLogin;
+
+                var result1 = MessageBox.Show("Save password?", "Important Question", MessageBoxButton.YesNo);
+                if (result1 == MessageBoxResult.Yes)
                 {
-                    this.MainBrowser.Visibility = System.Windows.Visibility.Collapsed;
-                }));
-
-                _client.GetAccessTokenAsync((userLogin) =>
-                {
-                    _userLogin = userLogin;
-
-
-                    var result1 = MessageBox.Show("Save password?", "Important Question", MessageBoxButton.YesNo);
-                    if (result1 == MessageBoxResult.Yes)
-                    {
-                        Properties.Settings.Default.Token = userLogin.Token;
-                        Properties.Settings.Default.Secret = userLogin.Secret;
-                        Properties.Settings.Default.Save();
-                    }
-
-                    LoadContents();
-                },
-                (error) =>
+                    Settings.Default.Token = userLogin.Token;
+                    Settings.Default.Secret = userLogin.Secret;
+                    Settings.Default.Save();
+                }
+                GetTree("/");
+                DisplayContents("/");
+            },
+                error =>
                 {
                     Console.WriteLine(error.Message);
                 });
+        }
+
+        //private void LoadContents()
+        //{
+        //    _client.GetMetaDataAsync("/", (response) =>
+        //    {
+        //        Console.WriteLine(String.Format("{1} folders found {0}{2} files found", Environment.NewLine
+        //            , response.Contents.Count(c => c.Is_Dir)
+        //            , response.Contents.Count(c => !c.Is_Dir)));
+
+        //        foreach (var item in response.Contents)
+        //            Console.WriteLine(item.Path);
+
+        //    },
+        //    (error) =>
+        //    {
+        //        Console.WriteLine(error.Message);
+        //    });
+        //}
+
+        private void GetTree(string path, TreeViewItem item = null)
+        {
+            _client.GetMetaDataAsync(path, response =>
+            {
+                Dispatcher.BeginInvoke(new ThreadStart(() =>
+                {
+                    if (response.Contents != null)
+                        InitTree(from folder in response.Contents
+                                 where folder.Is_Dir
+                                 select folder, item);
+                }));
+            },
+            error =>
+            {
+                Console.WriteLine(error.Message);
+            });
+        }
+
+        private void DisplayContents(string path)
+        {
+            _client.GetMetaDataAsync(path, response =>
+            {
+                Dispatcher.BeginInvoke(new ThreadStart(() =>
+                {
+                    if (response.Contents != null)
+                        ItemListBox.ItemsSource = SortContents(response.Contents);
+                }));
+            },
+           error =>
+           {
+               Console.WriteLine(error.Message);
+           });
+        }
+
+        private IEnumerable<MetaData> SortContents(IEnumerable<MetaData> contents)
+        {
+            return contents
+                .OrderBy(c => !c.Is_Dir)
+                .ThenBy(c => c.Name, StringComparer.CurrentCultureIgnoreCase);
+        }
+
+        private readonly object _dummyNode = null;
+        public string SelectedImagePath { get; set; }
+
+        void InitTree(IEnumerable<MetaData> tree, TreeViewItem tvi = null)
+        {
+            foreach (var item in tree.Select(s => new TreeViewItem
+            { Header = s.Name, Tag = s.Path, FontWeight = FontWeights.Normal }))
+            {
+                item.Items.Add(_dummyNode);
+                item.Expanded += folder_Expanded;
+                if (tvi == null)
+                    FoldersItem.Items.Add(item);
+                else
+                    tvi.Items.Add(item);
             }
         }
 
-        private void LoadContents()
+        void folder_Expanded(object sender, RoutedEventArgs e)
         {
-            _client.GetMetaDataAsync("/", (response) =>
+            var item = sender as TreeViewItem;
+            if (item == null || (item.Items.Count != 1 || item.Items[0] != _dummyNode)) return;
+            item.Items.Clear();
+            try
             {
-                Console.WriteLine(String.Format("{1} folders found {0}{2} files found", Environment.NewLine
-                    , response.Contents.Count(c => c.Is_Dir)
-                    , response.Contents.Count(c => !c.Is_Dir)));
-
-                foreach (var item in response.Contents)
-                    Console.WriteLine(item.Path);
-
-
-                //var a = response.Contents.First(dir => dir.Name == "SoundCloud");
-
-                //LoadContents2(a.Path);
-
-            },
-            (error) =>
-            {
-                Console.WriteLine(error.Message);
-            });
+                GetTree(item.Tag.ToString(), item);
+            }
+            catch (Exception) { }
         }
 
-        private void LoadContents2(string path)
+        private void foldersItem_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            _client.GetMetaDataAsync(path, (response) =>
-            {
-                //Console.WriteLine(String.Format("{1} folders found {0}{2} files found", Environment.NewLine
-                //    , response.Contents.Count(c => c.Is_Dir)
-                //    , response.Contents.Count(c => !c.Is_Dir)));
+            var tree = sender as TreeView;
+            if (tree == null) return;
+            var temp = tree.SelectedItem as TreeViewItem;
+            if (temp == null) return;
 
-                foreach (var item in response.Contents)
-                    Console.WriteLine(item.Path);
-            },
-            (error) =>
-            {
-                Console.WriteLine(error.Message);
-            });
-        }
-
-
-
-        private void Button_Click2(object sender, RoutedEventArgs e)
-        {
-            //LoadContents2(Path.Text);
-
+            DisplayContents(temp.Tag.ToString());
         }
     }
 }

@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="Nepholo.View.Body.WrapPanelData"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converter="clr-namespace:Nepholo.View.Body"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="160">
+
+    <UserControl.Resources>
+        <converter:ValueToDotConverter x:Key="DotConverter" />
+        <converter:BoolToVisibilityConverter x:Key="VisibilityConverter" />
+    </UserControl.Resources>
+
+    <StackPanel Background="White">
+        <Grid Height="160">
+            <Image Source="http://1.bp.blogspot.com/-Gv648iUY5p0/UD8rqW3deSI/AAAAAAAAACA/MrG4KxFyM5A/s1600/Fish.jpeg" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </Grid>
+        <TextBlock FontSize="18" Foreground="{StaticResource DarkGrey}">
+            <Run Text="{Binding Name, Mode=OneWay}" />
+            <!--<Run Text="{Binding Is_Dir, Mode=OneWay, Converter={StaticResource DotConverter}}" />
+            <Run Text="{Binding Extension, Mode=OneWay}" />-->
+        </TextBlock>
+        <TextBlock Text="{Binding Size, Mode=OneWay}" FontSize="12" Foreground="{StaticResource LightGrey}"
+                   Visibility="{Binding Is_Dir, Mode=OneWay, Converter={StaticResource VisibilityConverter}}" />
+    </StackPanel>
+</UserControl>
