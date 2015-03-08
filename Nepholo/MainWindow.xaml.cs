@@ -151,12 +151,18 @@ namespace Nepholo
 //                         select folder, item);
 //                //}));
 //            });
+            List<File> list;
+            if (String.IsNullOrWhiteSpace(path))
+                list = await _cloud.GetRoot();
+            else
+                list = await _cloud.GetFolder(path);
 
-            var a = await _cloud.GetRoot();
+            //InitTree(from folder in list
+            //         where folder.IsFolder
+            //         select folder, item);
 
-            InitTree(from folder in a
-                     where folder.IsFolder
-                     select folder, item);
+            InitTree(list.Where(f => f.IsFolder), item);
+
             //.ContinueWith(async t =>
             //{
             //    //Dispatcher.BeginInvoke(new ThreadStart(() =>
