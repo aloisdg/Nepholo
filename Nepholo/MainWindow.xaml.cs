@@ -104,7 +104,7 @@ namespace Nepholo
             foreach (var element in GetICloud.Where(element => element.Value != null))
                 CloudType.Add(element.Value);
 
-            _cloud = CloudType.First();
+            _cloud = CloudType.Last();
             var url = _cloud.GetOAuthToken();
 
             IsEnabled = false;
@@ -118,11 +118,16 @@ namespace Nepholo
             w.Show();
         }
 
-        void wb_LoadCompleted(object sender, NavigationEventArgs e)
+        async void wb_LoadCompleted(object sender, NavigationEventArgs e)
         {
             if (!e.Uri.Host.Contains("github")) return;
-            _cloud.Create(e.Uri.Query);
-            //GetTree(null);
+            
+            await _cloud.Create(e.Uri.Query);
+
+            Console.WriteLine("token ok");
+
+            GetTree(null);
+            DisplayContents(null);
         }
 
         void w_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -285,8 +290,7 @@ namespace Nepholo
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            GetTree(null);
-            DisplayContents(null);
+
         }
     }
 }
