@@ -41,17 +41,17 @@ namespace Nepholo
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        readonly DropNetClient _client;
-        private UserLogin _userLogin;
-
         [ImportMany(typeof(ICloud))]
         public IEnumerable<Lazy<ICloud>> GetICloud { get; set; }
+
+        private IEnumerable<ICloud> _cloudType;
+        private ICloud _cloud;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            CloudType = new Collection<ICloud>();
+            _cloudType = new Collection<ICloud>();
 
             //_client = new DropNetClient(ApiResource.DropKey, ApiResource.DropSecret) { UseSandbox = false };
             //if (!(String.IsNullOrWhiteSpace(Settings.Default.Token)
@@ -74,18 +74,8 @@ namespace Nepholo
             {
                 // http://stackoverflow.com/a/6753604
                 var path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
-
-                //Check the directory exists
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
-
-                //Create an assembly catalog of the assemblies with exports
-                //var catalog = new AggregateCatalog(
-                //    new AssemblyCatalog(Assembly.GetExecutingAssembly()),
-                //    new AssemblyCatalog(Assembly.Load("My.Other.Assembly")),
-                //    new DirectoryCatalog(path, "*.dll"));
-
-                //Create a composition container
                 var container = new CompositionContainer(new DirectoryCatalog(path, "*.dll"));
                 container.ComposeParts(this);
             }
@@ -96,15 +86,10 @@ namespace Nepholo
             Loaded += MainWindow_Loaded;
         }
 
-        private Collection<ICloud> CloudType;
-        private ICloud _cloud;
-
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            foreach (var element in GetICloud.Where(element => element.Value != null))
-                CloudType.Add(element.Value);
+            FillClouds();
 
-            _cloud = CloudType.Last();
             var url = _cloud.GetOAuthToken();
 
             IsEnabled = false;
@@ -118,7 +103,16 @@ namespace Nepholo
             w.Show();
         }
 
-        async void wb_LoadCompleted(object sender, NavigationEventArgs e)
+        private IEnumerable<ICloud> FillClouds()
+        {
+            _cloudType = GetICloud.Where(element => element.Value != null).Select(e => e.Value);
+
+            CloudBox.ItemsSource = _cloudType;
+            CloudBox.SelectedIndex = 0;
+            _cloud = _cloudType.First();
+        }
+        
+        private async void wb_LoadCompleted(object sender, NavigationEventArgs e)
         {
             if (!e.Uri.Host.Contains("github")) return;
             
@@ -130,7 +124,7 @@ namespace Nepholo
             DisplayContents(null);
         }
 
-        void w_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void w_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             IsEnabled = true;
         }
@@ -157,92 +151,6 @@ namespace Nepholo
                 ItemListBox.ItemsSource = SortContents(list);
         }
 
-        #region old
-        //void Connect()
-        //{
-        //    _client.GetTokenAsync(userLogin =>
-        //    {
-        //        var tokenurl = _client.BuildAuthorizeUrl("http://aloisdg.github.io/Nepholo/");
-        //        Dispatcher.BeginInvoke(new ThreadStart(() =>
-        //        {
-        //            //WebPanel.Visibility = Visibility.Visible;
-        //            //WebPanel.IsHitTestVisible = true;
-        //            //MainBrowser.LoadCompleted += MainBrowser_LoadCompleted;
-        //            //MainBrowser.Navigate(tokenurl);
-        //        }));
-        //    },
-        //    error =>
-        //    {
-        //        Console.WriteLine(error.Message);
-        //    });
-        //}
-
-        //void MainBrowser_LoadCompleted(object sender, NavigationEventArgs e)
-        //{
-        //    if (!e.Uri.Host.Contains("github")) return;
-        //    Dispatcher.BeginInvoke(new ThreadStart(() =>
-        //    {
-        //        //WebPanel.Visibility = Visibility.Collapsed;
-        //        //WebPanel.IsHitTestVisible = false;
-        //    }));
-
-        //    _client.GetAccessTokenAsync(userLogin =>
-        //    {
-        //        _userLogin = userLogin;
-
-        //        if ((MessageBox.Show("Save password?", "Important Question", MessageBoxButton.YesNo)) == MessageBoxResult.Yes)
-        //        {
-        //            Settings.Default.Token = userLogin.Token;
-        //            Settings.Default.Secret = userLogin.Secret;
-        //            Settings.Default.Save();
-        //        }
-        //        GetTree("/");
-        //        DisplayContents("/");
-        //    },
-        //        error =>
-        //        {
-        //            Console.WriteLine(error.Message);
-        //        });
-        //}
-
-        //private void GetTree(string path, TreeViewItem item = null)
-        //{
-        //    var md = new List<MetaData>();
-        //    //_client.GetMetaDataAsync(path, response => md = response.Contents ?? md,
-        //    //error =>
-        //    //{
-        //    //    Console.WriteLine(error.Message);
-        //    //    return;
-        //    //});
-
-        //    md = _client.GetMetaData(path).Contents; //Folder
-
-        //    Dispatcher.BeginInvoke(new ThreadStart(() =>
-        //    {
-        //        //InitTree(from folder in md
-        //        //         where folder.Is_Dir
-        //        //         select folder, item);
-        //    }));
-        //}
-
-        //private void DisplayContents(string path)
-        //{
-        //    _client.GetMetaDataAsync(path, response =>
-        //    {
-        //        Dispatcher.BeginInvoke(new ThreadStart(() =>
-        //        {
-        //            if (response.Contents != null)
-        //                ItemListBox.ItemsSource = SortContents(response.Contents);
-        //        }));
-        //    },
-        //   error =>
-        //   {
-        //       Console.WriteLine(error.Message);
-        //   });
-        //}
-
-        #endregion
-
         private IEnumerable<Nepholo.Plugin.Cloud.File> SortContents(IEnumerable<Nepholo.Plugin.Cloud.File> contents)
         {
             return contents
@@ -258,7 +166,7 @@ namespace Nepholo
             foreach (var item in tree.Select(s => new TreeViewItem { Header = s.Name, Tag = s.Id, FontWeight = FontWeights.Normal }))
             {
                 item.Items.Add(_dummyNode);
-                item.Expanded += folder_Expanded;
+                item.Expanded += ExpandFolder;
                 if (tvi == null)
                     FoldersItem.Items.Add(item);
                 else
@@ -266,7 +174,7 @@ namespace Nepholo
             }
         }
 
-        void folder_Expanded(object sender, RoutedEventArgs e)
+        void ExpandFolder(object sender, RoutedEventArgs e)
         {
             var item = sender as TreeViewItem;
             if (item == null || (item.Items.Count != 1 || item.Items[0] != _dummyNode)) return;
@@ -286,11 +194,6 @@ namespace Nepholo
             if (temp == null) return;
 
             DisplayContents(temp.Tag.ToString());
-        }
-
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

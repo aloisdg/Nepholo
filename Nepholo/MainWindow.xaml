@@ -203,12 +203,11 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="80" />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Grid.ColumnSpan="3">
+            <!--<Grid Grid.Row="0" Grid.ColumnSpan="3">
                 <Grid Margin="20,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -217,19 +216,34 @@
                     <TextBox Text="Path" FontSize="18" />
                     <Button Grid.Column="1" Content="&#xE111;" Click="ButtonBase_OnClick"/>
                 </Grid>
-            </Grid>
+            </Grid>-->
             <!---->
 
-            <Grid Grid.Column="0" Grid.Row="1" Background="{StaticResource DarkBrush}" Grid.RowSpan="2">
+            <Grid Background="{StaticResource DarkBrush}">
 
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <Grid Margin="20,20,20,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
 
-                <TreeView x:Name="FoldersItem" Grid.Row="0" Margin="20,20,0,0"
+                    <Grid Height="50" Width="40">
+                        <Image Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    </Grid>
+
+
+                    <ComboBox x:Name="CloudBox" Grid.Column="2" />
+
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="1" Background="{StaticResource DarkBrush}">
+
+                <TreeView x:Name="FoldersItem" Margin="20,10,0,0"
                           Background="Transparent" Foreground="{StaticResource LightBrush}" 
-					SelectedItemChanged="foldersItem_SelectedItemChanged" Style="{DynamicResource CustomModernTreeViewStyle}">
+					       SelectedItemChanged="foldersItem_SelectedItemChanged"
+                          Style="{DynamicResource CustomModernTreeViewStyle}">
                     <TreeView.Resources>
                         <Style TargetType="{x:Type TreeViewItem}">
                             <Setter Property="HeaderTemplate">
@@ -248,24 +262,23 @@
                 </TreeView>
             </Grid>
 
-            <GridSplitter ResizeDirection="Columns" Grid.Column="1" Grid.Row="1" Width="5" Grid.RowSpan="2"
+            <GridSplitter ResizeDirection="Columns" Grid.Column="1" Grid.Row="0" Width="5" Grid.RowSpan="2"
 				ResizeBehavior="PreviousAndNext"/>
 
-            <Grid Grid.Column="2" Grid.Row="1">
+            <Grid Grid.Column="2" Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
 
-
-                <Grid Grid.Column="1">
+                <!--<Grid Grid.Column="1">
                     <TextBox Text="Search" />
-                </Grid>
-                <Grid/>
+                </Grid>-->
+                <!--<Grid/>-->
             </Grid>
 
-            <Grid Grid.Row="2" Grid.Column="2">
+            <Grid Grid.Row="1" Grid.Column="2">
                 <ScrollViewer>
                     <ItemsControl x:Name="ItemListBox">
                         <ItemsControl.ItemsPanel>
@@ -282,15 +295,8 @@
                 </ScrollViewer>
             </Grid>
 
-            <!--<StackPanel>
-            <TextBox x:Name="Path" />
-            <Button Content="Read" Click="Button_Click2" />
-            <Button Content="Connect" Click="Button_Click" />
-        </StackPanel>-->
+
         </Grid>
 
-        <!--<Grid x:Name="WebPanel" Background="White" Visibility="Collapsed" IsHitTestVisible="False">
-            <WebBrowser x:Name="MainBrowser" Height="434" Width="Auto" />
-        </Grid>-->
     </Grid>
 </controls:MetroWindow>
