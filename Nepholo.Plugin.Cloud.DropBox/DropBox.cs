@@ -42,8 +42,6 @@ namespace Nepholo.Plugin.Cloud.DropBox
         {
             _client.GetAccessTokenAsync(userLogin =>
             {
-                _userLogin = userLogin;
-
                 //if ((MessageBox.Show("Save password?", "Important Question", MessageBoxButton.YesNo)) == MessageBoxResult.Yes)
                 //{
                 //    Settings.Default.Token = userLogin.Token;
