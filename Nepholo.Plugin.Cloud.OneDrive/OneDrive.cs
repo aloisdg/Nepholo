@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -12,7 +11,6 @@ namespace Nepholo.Plugin.Cloud.OneDrive
 {
     public class OneDrive : ICloud
     {
-        #region readonly
         private static readonly Options Options = new Options
         {
             ClientId = ApiKeys.OneClient,
@@ -24,7 +22,6 @@ namespace Nepholo.Plugin.Cloud.OneDrive
             ReadRequestsPerSecond = 2,
             WriteRequestsPerSecond = 2
         };
-        #endregion
 
         private Client _client;
 
@@ -42,22 +39,10 @@ namespace Nepholo.Plugin.Cloud.OneDrive
 
         public async Task Create(string url)
         {
-            // use System.Web
             var authCode = (HttpUtility.ParseQueryString(url)).Get("code");
 
             // Exchange the Authorization Code with Access/Refresh tokens
             var token = await _client.GetAccessTokenAsync(authCode);
-
-
-            //this.IsEnabled = false;
-
-            //var wb = new WebBrowser();
-            //wb.LoadCompleted += wb_LoadCompleted;
-            //wb.Navigate(tokenurl);
-
-            //var w = new Window { Content = wb, ShowInTaskbar = false, Title = "Authentification", Owner = this };
-            //w.Closing += w_Closing;
-            //w.Show();
         }
 
         public void Connect()
@@ -82,17 +67,8 @@ namespace Nepholo.Plugin.Cloud.OneDrive
 
         public async Task<List<File>> GetRoot()
         {
-            //var tmp = new List<File>();
-            //var rootFolder = .ContinueWith(async task =>
-            //{
-            //    var folderContent = 
-            //    return folderContent;
-            //});
-            //rootFolder.Wait();
-            //return tmp;
-
             var one = await _client.GetFolderAsync();
-            Console.WriteLine(one.Name);
+            Console.WriteLine("get root : " + one.Name);
             var two = await _client.GetContentsAsync(one.Id);
             return two.ToFiles();
         }
@@ -106,54 +82,6 @@ namespace Nepholo.Plugin.Cloud.OneDrive
         public void Identify()
         {
             throw new NotImplementedException();
-        }
-    }
-
-    public static class FileConverter
-    {
-        public static List<File> ToFiles(this IEnumerable<OneDriveRestAPI.Model.File> files)
-        {
-            return files.Select(file => file.ToFile()).ToList();
-        }
-
-        public static File ToFile(this OneDriveRestAPI.Model.File file)
-        {
-            var neo = new File();
-            neo.Id = file.Id;
-            neo.Name = file.Name;
-            neo.IsFolder = file.Type.Equals("folder");
-            neo.Size = file.Size.ToReadableBytes();
-            neo.Type = file.Type;
-            neo.Path = file.From.Id;
-            neo.Icon = file.Type.Equals("folder").ToIcon();
-            neo.ModifiedDate = DateTime.Parse(file.Updated_Time);
-            if (!file.Type.Equals("folder") || file.Data == null || !file.Data.Any())
-            {
-                neo.Files = null;
-                return neo;
-            }
-            foreach (var item in file.Data)
-                neo.Files.Add(item.ToFile());
-            return neo;
-        }
-
-        private static string ToIcon(this bool isFolder)
-        {
-            return isFolder
-                ? "https://www.dropbox.com/static/images/icons128/folder.png"
-                : "https://www.dropbox.com/static/images/icons128/page_white.png";
-        }
-
-        // http://stackoverflow.com/a/4975942
-        private static string ToReadableBytes(this long byteCount)
-        {
-            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
-            if (byteCount == 0)
-                return "0" + suf[0];
-            var bytes = Math.Abs(byteCount);
-            var place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
-            var num = Math.Round(bytes / Math.Pow(1024, place), 1);
-            return (Math.Sign(byteCount) * num) + suf[place];
         }
     }
 }

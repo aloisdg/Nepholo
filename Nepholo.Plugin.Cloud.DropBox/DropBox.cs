@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using DropNet;
-using DropNet.Models;
 
 namespace Nepholo.Plugin.Cloud.DropBox
 {
@@ -93,38 +91,5 @@ namespace Nepholo.Plugin.Cloud.DropBox
         {
             throw new NotImplementedException();
         }
-    }
-
-    public static class FileConverter
-    {
-        public static List<File> ToFiles(this List<MetaData> metaDatas)
-        {
-            return metaDatas.Select(md => md.ToFile()).ToList();
-        }
-
-        public static File ToFile(this MetaData file)
-        {
-            var neo = new File
-            {
-                Id = file.Path,
-                Name = file.Name,
-                IsFolder = file.Is_Dir,
-                Size = file.Size,
-                Type = file.Icon,
-                Path = file.Path,
-                Icon = "https://www.dropbox.com/static/images/icons128/" + file.Icon + ".png",
-                ModifiedDate = file.ModifiedDate
-            };
-            if (file.Contents == null || !file.Contents.Any())
-            {
-                neo.Files = null;
-                return neo;
-            }
-            foreach (var item in file.Contents)
-                neo.Files.Add(item.ToFile());
-            return neo;
-        }
-
-        // http://stackoverflow.com/a/16830804
     }
 }
