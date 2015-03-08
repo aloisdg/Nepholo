@@ -93,9 +93,7 @@ namespace Nepholo
             {
                 Debug.WriteLine(ex.Message);
             }
-
             Loaded += MainWindow_Loaded;
-
         }
 
         private Collection<ICloud> CloudType;
@@ -104,9 +102,9 @@ namespace Nepholo
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             foreach (var element in GetICloud.Where(element => element.Value != null))
-                CloudType.Add(element.Value as ICloud);
+                CloudType.Add(element.Value);
 
-            _cloud = CloudType.First();
+            _cloud = CloudType.Last();
             var url = _cloud.GetOAuthToken();
 
             IsEnabled = false;
@@ -134,7 +132,6 @@ namespace Nepholo
 
         private async void GetTree(string path, TreeViewItem item = null)
         {
-
             List<File> list;
             if (String.IsNullOrWhiteSpace(path))
                 list = await _cloud.GetRoot();
@@ -142,15 +139,17 @@ namespace Nepholo
                 list = await _cloud.GetFolder(path);
 
             InitTree(list.Where(f => f.IsFolder), item);
-
         }
 
         private async void DisplayContents(string path)
         {
-            var files = await _cloud.GetFolder(path);
-
-            if (files != null)
-                ItemListBox.ItemsSource = SortContents(files);
+            List<File> list;
+            if (String.IsNullOrWhiteSpace(path))
+                list = await _cloud.GetRoot();
+            else
+                list = await _cloud.GetFolder(path);
+            if (list != null)
+                ItemListBox.ItemsSource = SortContents(list);
         }
 
         #region old
@@ -287,7 +286,7 @@ namespace Nepholo
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             GetTree(null);
-            DisplayContents("/");
+            DisplayContents(null);
         }
     }
 }
