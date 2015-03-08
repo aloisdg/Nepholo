@@ -215,7 +215,7 @@
                         <ColumnDefinition Width="20"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Text="Path" FontSize="18" />
-                    <Button Grid.Column="1" Content="&#xE111;"/>
+                    <Button Grid.Column="1" Content="&#xE111;" Click="ButtonBase_OnClick"/>
                 </Grid>
             </Grid>
             <!---->
@@ -289,8 +289,8 @@
         </StackPanel>-->
         </Grid>
 
-        <Grid x:Name="WebPanel" Background="White" Visibility="Collapsed" IsHitTestVisible="False">
+        <!--<Grid x:Name="WebPanel" Background="White" Visibility="Collapsed" IsHitTestVisible="False">
             <WebBrowser x:Name="MainBrowser" Height="434" Width="Auto" />
-        </Grid>
+        </Grid>-->
     </Grid>
 </controls:MetroWindow>

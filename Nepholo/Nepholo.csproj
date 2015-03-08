@@ -60,6 +60,7 @@
       <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
@@ -86,7 +87,6 @@
     </ApplicationDefinition>
     <Compile Include="HeaderToImageConverter.cs" />
     <Compile Include="Model\Account.cs" />
-    <Compile Include="Model\ICloud.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\Body\BoolToVisibilityConverter.cs" />
@@ -185,6 +185,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Asset\Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Nepholo.Plugin.Cloud\Nepholo.Plugin.Cloud.csproj">
+      <Project>{923B89E9-954A-4FF8-B10B-FE8F7BE60920}</Project>
+      <Name>Nepholo.Plugin.Cloud</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
