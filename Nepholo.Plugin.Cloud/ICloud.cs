@@ -12,7 +12,7 @@ namespace Nepholo.Plugin.Cloud
     public interface ICloud
     {
         // Request a OAuth Token
-        string GetOAuthToken();
+        Task<string> GetOAuthToken();
 
         // Initialize a new Cloud for the first time
         Task Create(string url);

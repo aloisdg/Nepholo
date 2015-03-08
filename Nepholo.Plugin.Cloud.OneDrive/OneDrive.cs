@@ -27,14 +27,17 @@ namespace Nepholo.Plugin.Cloud.OneDrive
 
         public string OAuthUrl { get; private set; }
 
-        public string GetOAuthToken()
+        public Task<string> GetOAuthToken()
         {
-            // Initialize a new Client (without an Access/Refresh tokens)
-            _client = new Client(Options);
+            return Task.Run(() =>
+            {
+                // Initialize a new Client (without an Access/Refresh tokens)
+                _client = new Client(Options);
 
-            // Get the OAuth Request Url
-            OAuthUrl = _client.GetAuthorizationRequestUrl(new[] { Scope.Basic, Scope.Signin, Scope.SkyDrive, Scope.SkyDriveUpdate });
-            return OAuthUrl;
+                // Get the OAuth Request Url
+                OAuthUrl = _client.GetAuthorizationRequestUrl(new[] { Scope.Basic, Scope.Signin, Scope.SkyDrive, Scope.SkyDriveUpdate });
+                return OAuthUrl;
+            });
         }
 
         public async Task Create(string url)

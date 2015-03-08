@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
-namespace WPF_Explorer_Tree
+namespace Nepholo.View
 {
     [ValueConversion(typeof(string), typeof(bool))]
     public class HeaderToImageConverter : IValueConverter

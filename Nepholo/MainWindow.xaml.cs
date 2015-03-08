@@ -46,12 +46,14 @@ namespace Nepholo
 
         private IEnumerable<ICloud> _cloudType;
         private ICloud _cloud;
+        private Window _window;
 
         public MainWindow()
         {
             InitializeComponent();
 
             _cloudType = new Collection<ICloud>();
+            _window = new Window { ShowInTaskbar = false, Title = "Authentification" };
 
             //_client = new DropNetClient(ApiResource.DropKey, ApiResource.DropSecret) { UseSandbox = false };
             //if (!(String.IsNullOrWhiteSpace(Settings.Default.Token)
@@ -89,21 +91,27 @@ namespace Nepholo
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             FillClouds();
+            //SwitchCloud();
+        }
 
-            var url = _cloud.GetOAuthToken();
 
+        private async void SwitchCloud()
+        {
             IsEnabled = false;
+            var url = await _cloud.GetOAuthToken();
 
             var wb = new WebBrowser();
             wb.LoadCompleted += wb_LoadCompleted;
             wb.Navigate(url);
 
-            var w = new Window { Content = wb, ShowInTaskbar = false, Title = "Authentification", Owner = this };
-            w.Closing += w_Closing;
-            w.Show();
+            _window = new Window { ShowInTaskbar = false, Title = "Authentification" };
+            _window.Content = wb;
+            _window.Owner = this;
+            _window.Closing += w_Closing;
+            _window.Show();
         }
 
-        private IEnumerable<ICloud> FillClouds()
+        private void FillClouds()
         {
             _cloudType = GetICloud.Where(element => element.Value != null).Select(e => e.Value);
 
@@ -111,22 +119,21 @@ namespace Nepholo
             CloudBox.SelectedIndex = 0;
             _cloud = _cloudType.First();
         }
-        
+
         private async void wb_LoadCompleted(object sender, NavigationEventArgs e)
         {
             if (!e.Uri.Host.Contains("github")) return;
-            
             await _cloud.Create(e.Uri.Query);
-
             Console.WriteLine("token ok");
-
             GetTree(null);
             DisplayContents(null);
+            _window.Close();
         }
 
         private void w_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             IsEnabled = true;
+            CloudBox.IsEnabled = true;
         }
 
         private async void GetTree(string path, TreeViewItem item = null)
@@ -163,12 +170,16 @@ namespace Nepholo
 
         void InitTree(IEnumerable<Nepholo.Plugin.Cloud.File> tree, TreeViewItem tvi = null)
         {
+            if (tvi == null)
+                FoldersItem.Items.Clear();
             foreach (var item in tree.Select(s => new TreeViewItem { Header = s.Name, Tag = s.Id, FontWeight = FontWeights.Normal }))
             {
                 item.Items.Add(_dummyNode);
                 item.Expanded += ExpandFolder;
                 if (tvi == null)
+                {
                     FoldersItem.Items.Add(item);
+                }
                 else
                     tvi.Items.Add(item);
             }
@@ -194,6 +205,17 @@ namespace Nepholo
             if (temp == null) return;
 
             DisplayContents(temp.Tag.ToString());
+        }
+
+        private void CloudBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = sender as ComboBox;
+            if (comboBox == null) return;
+            var cloud = comboBox.SelectedItem as ICloud;
+            if (cloud == null) return;
+            CloudBox.IsEnabled = false;
+            _cloud = cloud;
+            SwitchCloud();
         }
     }
 }

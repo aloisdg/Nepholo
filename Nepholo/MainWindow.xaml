@@ -233,7 +233,7 @@
                     </Grid>
 
 
-                    <ComboBox x:Name="CloudBox" Grid.Column="2" />
+                    <ComboBox x:Name="CloudBox" Grid.Column="2" SelectionChanged="CloudBox_OnSelectionChanged" />
 
                 </Grid>
             </Grid>
