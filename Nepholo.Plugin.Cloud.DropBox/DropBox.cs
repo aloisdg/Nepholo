@@ -22,11 +22,13 @@ namespace Nepholo.Plugin.Cloud.DropBox
             return tokenUrl;
         }
 
-        public void Create(string url)
+        public Task Create(string url)
         {
-            var accessToken = _client.GetAccessToken();
-            _client.UserLogin = accessToken;
-
+            return Task.Run(() =>
+            {
+                var accessToken = _client.GetAccessToken();
+                _client.UserLogin = accessToken;
+            });
             //// step 3
             //_client.GetAccessTokenAsync((accessToken) =>
             //{
