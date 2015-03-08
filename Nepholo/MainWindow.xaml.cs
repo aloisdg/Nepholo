@@ -42,7 +42,7 @@ namespace Nepholo
         {
             InitializeComponent();
 
-            _client = new DropNetClient(ApiResource.AppKey, ApiResource.AppSecret) { UseSandbox = false };
+            _client = new DropNetClient(ApiResource.DropKey, ApiResource.DropSecret) { UseSandbox = false };
             if (!(String.IsNullOrWhiteSpace(Settings.Default.Token)
                 || String.IsNullOrWhiteSpace(Settings.Default.Secret)))
             {
@@ -64,7 +64,7 @@ namespace Nepholo
         {
             _client.GetTokenAsync(userLogin =>
             {
-                var tokenurl = _client.BuildAuthorizeUrl("http://www.google.com.au");
+                var tokenurl = _client.BuildAuthorizeUrl("http://aloisdg.github.io/Nepholo/");
                 Dispatcher.BeginInvoke(new ThreadStart(() =>
                 {
                     WebPanel.Visibility = Visibility.Visible;
@@ -91,7 +91,7 @@ namespace Nepholo
 
         void MainBrowser_LoadCompleted(object sender, NavigationEventArgs e)
         {
-            if (!e.Uri.Host.Contains("google")) return;
+            if (!e.Uri.Host.Contains("github")) return;
             Dispatcher.BeginInvoke(new ThreadStart(() =>
             {
                 WebPanel.Visibility = Visibility.Collapsed;

@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nepholo", "Nepholo\Nepholo.csproj", "{8FDF2A0B-3B91-4BAD-B386-603973CC5F14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nepholo.Plugin.Cloud", "Nepholo.Plugin.Cloud\Nepholo.Plugin.Cloud.csproj", "{923B89E9-954A-4FF8-B10B-FE8F7BE60920}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nepholo.Plugin.Cloud.OneDrive", "Nepholo.Plugin.Cloud.OneDrive\Nepholo.Plugin.Cloud.OneDrive.csproj", "{8D9CB5A1-C543-42C7-879E-8E115E52143E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nepholo.Plugin.Cloud.DropBox", "Nepholo.Plugin.Cloud.DropBox\Nepholo.Plugin.Cloud.DropBox.csproj", "{614D134E-FD88-4488-82C7-82158E779CE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{8FDF2A0B-3B91-4BAD-B386-603973CC5F14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FDF2A0B-3B91-4BAD-B386-603973CC5F14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FDF2A0B-3B91-4BAD-B386-603973CC5F14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{923B89E9-954A-4FF8-B10B-FE8F7BE60920}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{923B89E9-954A-4FF8-B10B-FE8F7BE60920}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{923B89E9-954A-4FF8-B10B-FE8F7BE60920}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{923B89E9-954A-4FF8-B10B-FE8F7BE60920}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D9CB5A1-C543-42C7-879E-8E115E52143E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D9CB5A1-C543-42C7-879E-8E115E52143E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D9CB5A1-C543-42C7-879E-8E115E52143E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D9CB5A1-C543-42C7-879E-8E115E52143E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{614D134E-FD88-4488-82C7-82158E779CE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{614D134E-FD88-4488-82C7-82158E779CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{614D134E-FD88-4488-82C7-82158E779CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{614D134E-FD88-4488-82C7-82158E779CE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
