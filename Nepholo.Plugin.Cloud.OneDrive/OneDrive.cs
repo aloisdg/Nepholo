@@ -40,7 +40,7 @@ namespace Nepholo.Plugin.Cloud.OneDrive
             return OAuthUrl;
         }
 
-        public async void Create(string url)
+        public async Task Create(string url)
         {
             // use System.Web
             var authCode = (HttpUtility.ParseQueryString(url)).Get("code");
@@ -122,7 +122,7 @@ namespace Nepholo.Plugin.Cloud.OneDrive
             neo.Id = file.Id;
             neo.Name = file.Name;
             neo.IsFolder = file.Type.Equals("folder");
-            neo.Size = file.Size.ToString();
+            neo.Size = file.Size.ToReadableBytes();
             neo.Type = file.Type;
             neo.Path = file.From.Id;
             neo.Icon = file.Type.Equals("folder").ToIcon();
@@ -142,6 +142,18 @@ namespace Nepholo.Plugin.Cloud.OneDrive
             return isFolder
                 ? "https://www.dropbox.com/static/images/icons128/folder.png"
                 : "https://www.dropbox.com/static/images/icons128/page_white.png";
+        }
+
+        // http://stackoverflow.com/a/4975942
+        private static string ToReadableBytes(this long byteCount)
+        {
+            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
+            if (byteCount == 0)
+                return "0" + suf[0];
+            var bytes = Math.Abs(byteCount);
+            var place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+            var num = Math.Round(bytes / Math.Pow(1024, place), 1);
+            return (Math.Sign(byteCount) * num) + suf[place];
         }
     }
 }
