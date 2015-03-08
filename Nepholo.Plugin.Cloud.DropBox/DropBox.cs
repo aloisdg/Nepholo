@@ -110,7 +110,7 @@ namespace Nepholo.Plugin.Cloud.DropBox
                 Size = file.Size,
                 Type = file.Icon,
                 Path = file.Path,
-                Icon = "https://www.dropbox.com/static/images/icons64/" + file.Icon + ".png",
+                Icon = "https://www.dropbox.com/static/images/icons128/" + file.Icon + ".png",
                 ModifiedDate = file.ModifiedDate
             };
             if (file.Contents == null || !file.Contents.Any())

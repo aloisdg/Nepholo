@@ -104,7 +104,7 @@ namespace Nepholo
             foreach (var element in GetICloud.Where(element => element.Value != null))
                 CloudType.Add(element.Value);
 
-            _cloud = CloudType.Last();
+            _cloud = CloudType.First();
             var url = _cloud.GetOAuthToken();
 
             IsEnabled = false;

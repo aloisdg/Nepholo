@@ -14,7 +14,7 @@
 
     <StackPanel Background="White">
         <Grid Height="160">
-            <Image Source="http://1.bp.blogspot.com/-Gv648iUY5p0/UD8rqW3deSI/AAAAAAAAACA/MrG4KxFyM5A/s1600/Fish.jpeg" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            <Image Source="{Binding Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" Height="128" Width="128" />
         </Grid>
         <TextBlock FontSize="18" Foreground="{StaticResource DarkGrey}">
             <Run Text="{Binding Name, Mode=OneWay}" />

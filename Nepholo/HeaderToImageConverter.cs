@@ -16,16 +16,17 @@ namespace WPF_Explorer_Tree
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value as string).Contains(@"/"))
+            var s = value as string;
+            if (s != null && !s.Contains(@"/"))
             {
-                Uri uri = new Uri("http://3.bp.blogspot.com/-sY7whMXT83o/UECGK-oSdeI/AAAAAAAAABM/-OXkkmppfvE/s1600/text-file-icon.png");
-                BitmapImage source = new BitmapImage(uri);
+                var uri = new Uri("http://3.bp.blogspot.com/-sY7whMXT83o/UECGK-oSdeI/AAAAAAAAABM/-OXkkmppfvE/s1600/text-file-icon.png");
+                var source = new BitmapImage(uri);
                 return source;
             }
             else
             {
-                Uri uri = new Uri("http://icons.iconarchive.com/icons/media-design/hydropro-v2/512/Folder-icon.png");
-                BitmapImage source = new BitmapImage(uri);
+                var uri = new Uri("http://icons.iconarchive.com/icons/media-design/hydropro-v2/512/Folder-icon.png");
+                var source = new BitmapImage(uri);
                 return source;
             }
         }

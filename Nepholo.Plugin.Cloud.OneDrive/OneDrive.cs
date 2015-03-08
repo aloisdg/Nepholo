@@ -141,7 +141,7 @@ namespace Nepholo.Plugin.Cloud.OneDrive
         {
             return isFolder
                 ? "https://www.dropbox.com/static/images/icons128/folder.png"
-                : "https://www.dropbox.com/static/images/icons64/page_white.png";
+                : "https://www.dropbox.com/static/images/icons128/page_white.png";
         }
     }
 }
