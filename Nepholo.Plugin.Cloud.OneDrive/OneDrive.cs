@@ -42,9 +42,6 @@ namespace Nepholo.Plugin.Cloud.OneDrive
 
         public async void Create(string url)
         {
-
-            if (!url.Contains("github")) return;
-
             // use System.Web
             var authCode = (HttpUtility.ParseQueryString(url)).Get("code");
 
@@ -85,14 +82,19 @@ namespace Nepholo.Plugin.Cloud.OneDrive
 
         public async Task<List<File>> GetRoot()
         {
-            var tmp = new List<File>();
-            var rootFolder = await _client.GetFolderAsync().ContinueWith(async task =>
-            {
-                var folderContent = await _client.GetContentsAsync(task.Result.Id);
-                return folderContent;
-            });
-            rootFolder.Wait();
-            return tmp;
+            //var tmp = new List<File>();
+            //var rootFolder = .ContinueWith(async task =>
+            //{
+            //    var folderContent = 
+            //    return folderContent;
+            //});
+            //rootFolder.Wait();
+            //return tmp;
+
+            var one = await _client.GetFolderAsync();
+            Console.WriteLine(one.Name);
+            var two = await _client.GetContentsAsync(one.Id);
+            return two.ToFiles();
         }
 
         public async Task<List<File>> GetFolder(string id)
@@ -116,17 +118,20 @@ namespace Nepholo.Plugin.Cloud.OneDrive
 
         public static File ToFile(this OneDriveRestAPI.Model.File file)
         {
-            var neo = new File
+            var neo = new File();
+            neo.Id = file.Id;
+            neo.Name = file.Name;
+            neo.IsFolder = file.Type.Equals("folder");
+            neo.Size = file.Size.ToString();
+            neo.Type = file.Type;
+            neo.Path = file.From.Id;
+            neo.Icon = file.Type.Equals("folder").ToIcon();
+            neo.ModifiedDate = DateTime.Parse(file.Updated_Time);
+            if (!file.Type.Equals("folder") || file.Data == null || !file.Data.Any())
             {
-                Id = file.Id,
-                Name = file.Name,
-                IsFolder = file.Type.Equals("folder"),
-                Size = file.Size.ToString(),
-                Type = file.Type,
-                Path = file.From.Id,
-                Icon = file.Type.Equals("folder").ToIcon(),
-                ModifiedDate = DateTime.Parse(file.Updated_Time)
-            };
+                neo.Files = null;
+                return neo;
+            }
             foreach (var item in file.Data)
                 neo.Files.Add(item.ToFile());
             return neo;
