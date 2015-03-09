@@ -93,7 +93,6 @@ namespace Nepholo
             FillClouds();
         }
 
-
         private async void SwitchCloud()
         {
             IsEnabled = false;
@@ -113,7 +112,7 @@ namespace Nepholo
             _cloudType = GetICloud.Where(element => element.Value != null).Select(e => e.Value);
 
             CloudBox.ItemsSource = _cloudType;
-            CloudBox.SelectedIndex = 1;
+            CloudBox.SelectedIndex = 0;
             //_cloud = _cloudType.Last();
         }
 
@@ -139,6 +138,8 @@ namespace Nepholo
         {
             var a = await _cloud.Identify();
             Console.WriteLine(a.Email);
+            Name.Text = a.Name;
+            Mail.Text = a.Email;
         }
 
         private async void GetTree(string path, TreeViewItem item = null)
