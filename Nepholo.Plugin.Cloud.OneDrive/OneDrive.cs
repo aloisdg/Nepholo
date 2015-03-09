@@ -25,6 +25,16 @@ namespace Nepholo.Plugin.Cloud.OneDrive
 
         private Client _client;
 
+        public string Name
+        {
+            get { return "OneDrive"; }
+        }
+
+        public string Symbol
+        {
+            get { return ""; }
+        }
+
         public string OAuthUrl { get; private set; }
 
         public Task<string> GetOAuthToken()
@@ -71,7 +81,7 @@ namespace Nepholo.Plugin.Cloud.OneDrive
         public async Task<List<File>> GetRoot()
         {
             var one = await _client.GetFolderAsync();
-            Console.WriteLine("get root : " + one.Name);
+            Console.WriteLine(one.Name);
             var two = await _client.GetContentsAsync(one.Id);
             return two.ToFiles();
         }
@@ -88,10 +98,6 @@ namespace Nepholo.Plugin.Cloud.OneDrive
             Console.WriteLine(quota.Quota);
             var info = await _client.GetMeAsync();
             Console.WriteLine(info.Name);
-
-
-
-
 
             return info.ToAccount(quota);
         }

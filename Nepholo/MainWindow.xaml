@@ -237,14 +237,21 @@
                             Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" />
                     </Grid>
 
-                    <StackPanel Grid.Column="1">
-                        <TextBlock x:Name="Name" />
-                        <TextBlock x:Name="Mail" />
+                    <StackPanel Grid.Column="1" Margin="20,0">
+                        <TextBlock x:Name="Name" Foreground="White" />
+                        <TextBlock x:Name="Mail" Foreground="White" />
                     </StackPanel>
 
-
-
-                    <ComboBox x:Name="CloudBox" Grid.Column="2" SelectionChanged="CloudBox_OnSelectionChanged" />
+                    <ComboBox x:Name="CloudBox" Grid.Column="2" SelectionChanged="CloudBox_OnSelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Text="{Binding}" FontFamily="Segoe UI Symbol" Foreground="{StaticResource DarkBrush}"
+                                               TextAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
                 </Grid>
             </Grid>

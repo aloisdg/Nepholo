@@ -13,6 +13,16 @@ namespace Nepholo.Plugin.Cloud.DropBox
         private readonly DropNetClient _client =
             new DropNetClient(ApiKeys.DropKey, ApiKeys.DropSecret) { UseSandbox = false };
 
+        public string Name
+        {
+            get { return "DropBox"; }
+        }
+
+        public string Symbol
+        {
+            get { return ""; }
+        }
+
         public Task<string> GetOAuthToken()
         {
             return Task.Run(() =>

@@ -11,6 +11,9 @@ namespace Nepholo.Plugin.Cloud
     [InheritedExport(typeof (ICloud))]
     public interface ICloud
     {
+        string Name { get; }
+        string Symbol { get; }
+
         // Request a OAuth Token
         Task<string> GetOAuthToken();
 

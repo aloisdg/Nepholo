@@ -111,7 +111,7 @@ namespace Nepholo
         {
             _cloudType = GetICloud.Where(element => element.Value != null).Select(e => e.Value);
 
-            CloudBox.ItemsSource = _cloudType;
+            CloudBox.ItemsSource = _cloudType.Select(cloud => cloud.Symbol);
             CloudBox.SelectedIndex = 0;
             //_cloud = _cloudType.Last();
         }
@@ -218,10 +218,8 @@ namespace Nepholo
         {
             var comboBox = sender as ComboBox;
             if (comboBox == null) return;
-            var cloud = comboBox.SelectedItem as ICloud;
-            if (cloud == null) return;
+            _cloud = _cloudType.First(c => c.Symbol.Equals(comboBox.SelectedItem as string));
             CloudBox.IsEnabled = false;
-            _cloud = cloud;
             SwitchCloud();
         }
     }
