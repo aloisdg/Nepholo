@@ -111,8 +111,8 @@ namespace Nepholo
         {
             _cloudType = GetICloud.Where(element => element.Value != null).Select(e => e.Value);
 
-            CloudBox.ItemsSource = _cloudType.Select(cloud => cloud.Symbol);
-            CloudBox.SelectedIndex = 0;
+            AccountBox.ItemsSource = _cloudType.Select(cloud => cloud.Name);
+            AccountBox.SelectedIndex = 0;
             //_cloud = _cloudType.Last();
         }
 
@@ -131,18 +131,17 @@ namespace Nepholo
             IsEnabled = true;
             AccountBox.IsEnabled = true;
 
-            Test();
+            AddAccount();
         }
 
-        private async void Test()
+        private async void AddAccount()
         {
             var a = await _cloud.Identify();
             Console.WriteLine(a.Email);
-            //Name.Text = a.Name;
-            //Mail.Text = a.Email;
+            App.Accounts.Add(a);
         }
 
-        private async void GetTree(string path, TreeViewItem item = null)
+        private async void GetTree(string path, ItemsControl item = null)
         {
             List<File> list;
             if (String.IsNullOrWhiteSpace(path))
@@ -164,7 +163,7 @@ namespace Nepholo
                 ItemListBox.ItemsSource = SortContents(list);
         }
 
-        private IEnumerable<Nepholo.Plugin.Cloud.File> SortContents(IEnumerable<Nepholo.Plugin.Cloud.File> contents)
+        private static IEnumerable<Nepholo.Plugin.Cloud.File> SortContents(IEnumerable<Nepholo.Plugin.Cloud.File> contents)
         {
             return contents
                 .OrderBy(c => !c.IsFolder)
@@ -174,7 +173,7 @@ namespace Nepholo
         private readonly object _dummyNode = null;
         public string SelectedImagePath { get; set; }
 
-        void InitTree(IEnumerable<Nepholo.Plugin.Cloud.File> tree, TreeViewItem tvi = null)
+        void InitTree(IEnumerable<Nepholo.Plugin.Cloud.File> tree, ItemsControl tvi = null)
         {
             if (tvi == null)
                 FoldersItem.Items.Clear();
@@ -214,18 +213,15 @@ namespace Nepholo
             DisplayContents(temp.Tag.ToString());
         }
 
-        private void CloudBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var box = sender as ListBox;
-            if (box == null) return;
-            _cloud = _cloudType.First(c => c.Symbol.Equals(box.SelectedItem as Nepholo.Model.Account));
-            AccountBox.IsEnabled = false;
-            SwitchCloud();
-        }
+        private void AccountBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) {}
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var box = AccountBox as ComboBox;
+            if (box == null) return;
+            _cloud = _cloudType.First(c => c.Name.Equals(box.SelectedItem as string));
+            AccountBox.IsEnabled = false;
+            SwitchCloud();
         }
     }
 }

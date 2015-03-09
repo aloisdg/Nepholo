@@ -1,12 +1,8 @@
 ﻿namespace Nepholo.Model
 {
-    class Account : Plugin.Cloud.Account
+    public class Account : Plugin.Cloud.Account
     {
-        string Picture { get; set; }
-
-        string AccessToken { get; set; }
-        string Token { get; set; }
-    
-        
+        public string AccessToken { get; set; }
+        public string Token { get; set; }
     }
 }
