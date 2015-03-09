@@ -213,11 +213,11 @@ namespace Nepholo
             DisplayContents(temp.Tag.ToString());
         }
 
-        private void AccountBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) {}
+        private void CloudBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) {}
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var box = AccountBox as ComboBox;
+            var box = CloudBox as ComboBox;
             if (box == null) return;
             _cloud = _cloudType.First(c => c.Name.Equals(box.SelectedItem as string));
             AccountBox.IsEnabled = false;
