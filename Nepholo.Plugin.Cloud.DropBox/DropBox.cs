@@ -80,23 +80,56 @@ namespace Nepholo.Plugin.Cloud.DropBox
         {
             return Task.Run(() =>
             {
-                _client.GetFileAsync(id,
-                    async response =>
-                    {
-                        using (var sourceStream = new FileStream(name,
-                            FileMode.Append, FileAccess.Write, FileShare.None,
-                            bufferSize: 4096, useAsync: true))
-                        {
-                            var encodedText = Encoding.Unicode.GetBytes(response.Content);
-                            await sourceStream.WriteAsync(encodedText, 0, encodedText.Length);
-                        }
-                    },
-                    error =>
-                    {
-                        Debug.WriteLine(error.Message);
-                        //Do something on error
-                    });
+                //_client.GetFileAsync(id,
+                //    async response =>
+                //    {
+                //        using (var sourceStream = new FileStream(name,
+                //            FileMode.Append, FileAccess.Write, FileShare.None,
+                //            bufferSize: 4096, useAsync: true))
+                //        {
+                //            var encodedText = Encoding.Unicode.GetBytes(response.Content);
+                //            await sourceStream.WriteAsync(encodedText, 0, encodedText.Length);
+                //        }
+                //    },
+                //    error =>
+                //    {
+                //        Debug.WriteLine(error.Message);
+                //        //Do something on error
+                //    });
+
+                // Sync
+                var fileBytes = _client.GetFile(id);
+                ByteArrayToFile(name, fileBytes);
+
             });
+        }
+
+        public bool ByteArrayToFile(string _FileName, byte[] _ByteArray)
+        {
+            try
+            {
+                // Open file for reading
+                System.IO.FileStream _FileStream =
+                   new System.IO.FileStream(_FileName, System.IO.FileMode.Create,
+                                            System.IO.FileAccess.Write);
+                // Writes a block of bytes to this stream using data from
+                // a byte array.
+                _FileStream.Write(_ByteArray, 0, _ByteArray.Length);
+
+                // close file stream
+                _FileStream.Close();
+
+                return true;
+            }
+            catch (Exception _Exception)
+            {
+                // Error
+                Console.WriteLine("Exception caught in process: {0}",
+                                  _Exception.ToString());
+            }
+
+            // error occured, return false
+            return false;
         }
 
         public Task Upload(string id, string name)
