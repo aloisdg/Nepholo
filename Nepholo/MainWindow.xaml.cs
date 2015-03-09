@@ -129,7 +129,7 @@ namespace Nepholo
         private void w_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             IsEnabled = true;
-            CloudBox.IsEnabled = true;
+            AccountBox.IsEnabled = true;
 
             Test();
         }
@@ -138,8 +138,8 @@ namespace Nepholo
         {
             var a = await _cloud.Identify();
             Console.WriteLine(a.Email);
-            Name.Text = a.Name;
-            Mail.Text = a.Email;
+            //Name.Text = a.Name;
+            //Mail.Text = a.Email;
         }
 
         private async void GetTree(string path, TreeViewItem item = null)
@@ -216,11 +216,16 @@ namespace Nepholo
 
         private void CloudBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var comboBox = sender as ComboBox;
-            if (comboBox == null) return;
-            _cloud = _cloudType.First(c => c.Symbol.Equals(comboBox.SelectedItem as string));
-            CloudBox.IsEnabled = false;
+            var box = sender as ListBox;
+            if (box == null) return;
+            _cloud = _cloudType.First(c => c.Symbol.Equals(box.SelectedItem as Nepholo.Model.Account));
+            AccountBox.IsEnabled = false;
             SwitchCloud();
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
