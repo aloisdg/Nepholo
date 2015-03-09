@@ -138,8 +138,8 @@ namespace Nepholo
         {
             var a = await _cloud.Identify();
             Console.WriteLine(a.Email);
-            Name.Text = a.Name;
-            Mail.Text = a.Email;
+            /*Name.Text = a.Name;
+            Mail.Text = a.Email;*/
         }
 
         private async void GetTree(string path, TreeViewItem item = null)
