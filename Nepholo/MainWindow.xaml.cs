@@ -111,8 +111,8 @@ namespace Nepholo
         {
             _cloudType = GetICloud.Where(element => element.Value != null).Select(e => e.Value);
 
-            AccountBox.ItemsSource = _cloudType.Select(cloud => cloud.Name);
-            AccountBox.SelectedIndex = 0;
+            CloudBox.ItemsSource = _cloudType.Select(cloud => cloud.Name);
+            CloudBox.SelectedIndex = 0;
             //_cloud = _cloudType.Last();
         }
 
@@ -129,7 +129,6 @@ namespace Nepholo
         private void w_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             IsEnabled = true;
-            AccountBox.IsEnabled = true;
 
             AddAccount();
         }
@@ -138,7 +137,7 @@ namespace Nepholo
         {
             var a = await _cloud.Identify();
             Console.WriteLine(a.Email);
-            App.Accounts.Add(a);
+            //App.Accounts.Add(a);
         }
 
         private async void GetTree(string path, ItemsControl item = null)
@@ -220,7 +219,6 @@ namespace Nepholo
             var box = CloudBox as ComboBox;
             if (box == null) return;
             _cloud = _cloudType.First(c => c.Name.Equals(box.SelectedItem as string));
-            AccountBox.IsEnabled = false;
             SwitchCloud();
         }
     }

@@ -226,16 +226,16 @@
             <Grid Background="{StaticResource DarkBrush}">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="40" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="80" />
                     </Grid.RowDefinitions>
-                    <Grid>
+                    <Grid Margin="20,20,20,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <ComboBox x:Name="CloudBox" Margin="20,20,10,20" SelectionChanged="CloudBox_OnSelectionChanged">
+                        <ComboBox x:Name="CloudBox" Margin="0,0,10,0" SelectionChanged="CloudBox_OnSelectionChanged">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -246,9 +246,9 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <Button Margin="10,20,20,20" Grid.Column="1" Content="+" Click="ButtonBase_OnClick" />
+                        <Button Margin="10,0,0,0" Grid.Column="1" Content="+" Click="ButtonBase_OnClick" />
                     </Grid>
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="1" Margin="20,10,20,20">
                         <ListBox x:Name="AccountBox" ItemsSource="{Binding App.Accounts}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
