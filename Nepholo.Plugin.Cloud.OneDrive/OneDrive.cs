@@ -60,6 +60,9 @@ namespace Nepholo.Plugin.Cloud.OneDrive
 
         public void Connect()
         {
+            // Initialize a new Client, this time by providing previously requested Access/Refresh tokens
+            // var client2 = new Client(clientId, clientSecret, callbackUrl, token.Access_Token, token.Refresh_Token);
+
             throw new NotImplementedException();
         }
 
@@ -68,14 +71,21 @@ namespace Nepholo.Plugin.Cloud.OneDrive
             throw new NotImplementedException();
         }
 
-        public void Download(string id, string name)
+        public async void Download(string id, string name)
         {
-            throw new NotImplementedException();
+            using (var fileStream = System.IO.File.OpenWrite(name))
+            {
+                var contentStream = await _client.DownloadAsync(id);
+                await contentStream.CopyToAsync(fileStream);
+            }
         }
 
-        public void Upload(string id, string name, Stream content)
+        public async void Upload(string id, string name)
         {
-            throw new NotImplementedException();
+            using (var fileStream = System.IO.File.OpenRead(name))
+            {
+                await _client.UploadAsync(id, fileStream, Name);
+            }
         }
 
         public async Task<List<File>> GetRoot()

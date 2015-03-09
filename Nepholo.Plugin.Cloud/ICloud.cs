@@ -30,7 +30,7 @@ namespace Nepholo.Plugin.Cloud
         void Download(string id, string name);
 
         // Upload something
-        void Upload(string id, string name, Stream content);
+        void Upload(string id, string name);
 
         // List root folder's content
         Task<List<File>> GetRoot();

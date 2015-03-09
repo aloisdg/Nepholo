@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
@@ -77,12 +78,40 @@ namespace Nepholo.Plugin.Cloud.DropBox
 
         public void Download(string id, string name)
         {
-            throw new NotImplementedException();
+            _client.GetFileAsync(id,
+            async response =>
+            {
+                using (var sourceStream = new FileStream(name,
+                    FileMode.Append, FileAccess.Write, FileShare.None,
+                    bufferSize: 4096, useAsync: true))
+                {
+                    var encodedText = Encoding.Unicode.GetBytes(response.Content);
+                    await sourceStream.WriteAsync(encodedText, 0, encodedText.Length);
+                }
+            },
+            error =>
+            {
+                Debug.WriteLine(error.Message);
+                //Do something on error
+            });
         }
 
-        public void Upload(string id, string name, Stream content)
+        public void Upload(string id, string name)
         {
-            throw new NotImplementedException();
+            using (var fileStream = System.IO.File.OpenRead(name))
+            {
+                //var uploaded = _client.UploadFile(id, System.IO.Path.GetFileName(name), fileStream);
+                _client.UploadFileAsync(id, System.IO.Path.GetFileName(name), fileStream,
+                    response =>
+                    {
+                        //Do something with response
+                    },
+                    error =>
+                    {
+                        Debug.WriteLine(error.Message);
+                        //Do something on error
+                    });
+            }
         }
 
         public Task<List<File>> GetRoot()

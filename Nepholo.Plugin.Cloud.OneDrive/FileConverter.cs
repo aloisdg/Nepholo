@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Web.UI;
 using OneDriveRestAPI.Model;
 
 namespace Nepholo.Plugin.Cloud.OneDrive

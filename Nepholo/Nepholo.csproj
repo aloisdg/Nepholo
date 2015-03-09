@@ -90,7 +90,6 @@
     </ApplicationDefinition>
     <Compile Include="View\EmailToImageConverter.cs" />
     <Compile Include="View\HeaderToImageConverter.cs" />
-    <Compile Include="Model\Account.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\Body\BoolToVisibilityConverter.cs" />

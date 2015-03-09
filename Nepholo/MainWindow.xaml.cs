@@ -75,7 +75,7 @@ namespace Nepholo
             try
             {
                 // http://stackoverflow.com/a/6753604
-                var path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
+                var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
                 var container = new CompositionContainer(new DirectoryCatalog(path, "*.dll"));
