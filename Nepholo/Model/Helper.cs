@@ -7,7 +7,7 @@ namespace Nepholo.Model
 {
     class Helper
     {
-        public static T DeserializeFromXmlFile<T>(string file)
+        public static T DeserializeFromXmlFile<T>(string file) where T : new()
         {
             try
             {
@@ -17,7 +17,7 @@ namespace Nepholo.Model
             }
             catch (FileNotFoundException)
             {
-                return default(T);
+                return new T();
             }
         }
 

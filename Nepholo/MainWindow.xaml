@@ -325,7 +325,9 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <body:WrapPanelData Width="160" Height="200" Margin="10,10,0,0" />
+                                <Grid> 
+                                    <body:WrapPanelData Width="160" Height="200" Margin="10,10,0,0" />
+                                </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

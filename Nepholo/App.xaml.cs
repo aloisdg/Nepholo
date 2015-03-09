@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using Nepholo.Plugin.Cloud;
 
 namespace Nepholo
 {
@@ -9,6 +10,7 @@ namespace Nepholo
     public partial class App : Application
     {
         public static ObservableCollection<Nepholo.Model.Account> Accounts { get; set; }
+        public static ICloud Cloud { get; set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
