@@ -89,6 +89,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\Account.cs" />
+    <Compile Include="Model\Helper.cs" />
     <Compile Include="View\EmailToImageConverter.cs" />
     <Compile Include="View\HeaderToImageConverter.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

@@ -1,6 +1,6 @@
 ﻿namespace Nepholo.Model
 {
-    class Account : Plugin.Cloud.Account
+    public class Account : Plugin.Cloud.Account
     {
         string Picture { get; set; }
 

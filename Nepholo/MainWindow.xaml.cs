@@ -222,5 +222,10 @@ namespace Nepholo
             CloudBox.IsEnabled = false;
             SwitchCloud();
         }
+
+        private void CloseApp(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Model.Helper.SerializeToXmlFile<ObservableCollection<Nepholo.Model.Account>>("accounts.xml", App.Accounts);
+        }
     }
 }
