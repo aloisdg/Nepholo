@@ -42,12 +42,22 @@ namespace Nepholo.View.Body
 
         private void Look(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("Done Tomorrow");
         }
 
         private void Save(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            // string path = Environment.SpecialFolder.UserProfile + @"\Downloads";
+            var menuItem = sender as MenuItem;
+            if (menuItem == null) return;
+            var obj = ((ContextMenu)menuItem.Parent).PlacementTarget as StackPanel;
+            if (obj == null) return;
+
+            var name = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), TextName.Text);
+
+            App.Cloud.Download(obj.Tag.ToString(), name).Wait();
+            Console.WriteLine(name);
+            Process.Start(name);
         }
 
         private void SaveTo(object sender, RoutedEventArgs e)
