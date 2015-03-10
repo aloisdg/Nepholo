@@ -149,6 +149,7 @@ namespace Nepholo
             var a = await App.Cloud.Identify();
             Console.WriteLine(a.Email);
             a.Tokens = token;
+            a.Cloud = App.Cloud.Name;
             App.Accounts.Add(a);
         }
 
@@ -244,8 +245,6 @@ namespace Nepholo
             var grid = sender as Grid;
             if (grid != null)
             {
-                //GetTree(grid.Tag.ToString());
-                //InitTree(grid.Tag.ToString()), item);
                 DisplayContents(grid.Tag.ToString());
             }
         }

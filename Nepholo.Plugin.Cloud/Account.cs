@@ -7,6 +7,7 @@ namespace Nepholo.Plugin.Cloud
         public Storage Storage { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        public string Cloud { get; set; }
         public Tokens Tokens { get; set; }
     }
 }
