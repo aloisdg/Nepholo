@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using Nepholo.Model;
 using Nepholo.Plugin.Cloud;
 
 namespace Nepholo
@@ -14,7 +15,7 @@ namespace Nepholo
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            Accounts = Model.Helper.DeserializeFromXmlFile<ObservableCollection<Account>>("accounts.xml");
+            Accounts = Helper.DeserializeFromXmlFile<ObservableCollection<Account>>("accounts.xml");
 
             //// add custom accent and theme resource dictionaries
             //ThemeManager.AddAccent("CustomAccent1", new Uri("pack://application:,,,/MahAppsMetroThemesSample;component/View/Theme.xaml"));

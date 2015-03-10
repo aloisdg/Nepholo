@@ -23,7 +23,7 @@ namespace Nepholo.Model
 
         public static void SerializeToXmlFile<T>(string file, T data)
         {
-            System.IO.File.WriteAllText(file, SerializeToXml<T>(data));
+            File.WriteAllText(file, SerializeToXml(data));
         }
 
         public static string SerializeToXml<T>(T toSerialize)

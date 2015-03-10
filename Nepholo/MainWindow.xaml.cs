@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
@@ -135,7 +136,7 @@ namespace Nepholo
             DisplayContents(null);
         }
 
-        private void w_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void w_Closing(object sender, CancelEventArgs e)
         {
             IsEnabled = true;
 
@@ -171,7 +172,7 @@ namespace Nepholo
                 ItemListBox.ItemsSource = SortContents(list);
         }
 
-        private static IEnumerable<Nepholo.Plugin.Cloud.File> SortContents(IEnumerable<Nepholo.Plugin.Cloud.File> contents)
+        private static IEnumerable<File> SortContents(IEnumerable<File> contents)
         {
             return contents
                 .OrderBy(c => !c.IsFolder)
@@ -181,7 +182,7 @@ namespace Nepholo
         private readonly object _dummyNode = null;
         public string SelectedImagePath { get; set; }
 
-        void InitTree(IEnumerable<Nepholo.Plugin.Cloud.File> tree, ItemsControl tvi = null)
+        void InitTree(IEnumerable<File> tree, ItemsControl tvi = null)
         {
             if (tvi == null)
                 FoldersItem.Items.Clear();
@@ -225,13 +226,13 @@ namespace Nepholo
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var box = CloudBox as ComboBox;
+            var box = CloudBox;
             if (box == null) return;
             App.Cloud = _cloudType.First(c => c.Name.Equals(box.SelectedItem as string));
             SwitchCloud();
         }
 
-        private void CloseApp(object sender, System.ComponentModel.CancelEventArgs e)
+        private void CloseApp(object sender, CancelEventArgs e)
         {
             Helper.SerializeToXmlFile("accounts.xml", App.Accounts);
         }
