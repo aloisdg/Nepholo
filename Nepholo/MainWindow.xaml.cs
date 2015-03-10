@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Navigation;
 using DropNet;
 using DropNet.Models;
@@ -134,7 +135,7 @@ namespace Nepholo
             AddAccount();
         }
 
-        private async void AddAccount()
+        private static async void AddAccount()
         {
             var a = await App.Cloud.Identify();
             Console.WriteLine(a.Email);
@@ -230,6 +231,17 @@ namespace Nepholo
         private void CloseApp(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Model.Helper.SerializeToXmlFile<ObservableCollection<Nepholo.Model.Account>>("accounts.xml", App.Accounts);
+        }
+
+        private void UIElement_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var grid = sender as Grid;
+            if (grid != null)
+            {
+                //GetTree(grid.Tag.ToString());
+                //InitTree(grid.Tag.ToString()), item);
+                DisplayContents(grid.Tag.ToString());
+            }
         }
     }
 }

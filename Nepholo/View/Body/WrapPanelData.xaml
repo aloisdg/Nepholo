@@ -13,6 +13,7 @@
     </UserControl.Resources>
 
     <StackPanel Background="White" Tag="{Binding Id}">
+        <TextBlock x:Name="BoolBlock" Visibility="Collapsed" Tag="{Binding IsFolder}" ></TextBlock>
         <Grid Height="160">
             <Image Source="{Binding Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" Height="128" Width="128" />
         </Grid>

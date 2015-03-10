@@ -325,7 +325,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid> 
+                                <Grid MouseLeftButtonUp="UIElement_OnMouseLeftButtonUp" Tag="{Binding Id}"> 
                                     <body:WrapPanelData Width="160" Height="200" Margin="10,10,0,0" />
                                 </Grid>
                             </DataTemplate>

@@ -29,6 +29,13 @@ namespace Nepholo.View.Body
 
         private void Open(object sender, RoutedEventArgs e)
         {
+            var b = BoolBlock.Tag as bool? ?? false;
+            if (b)
+            {
+                MessageBox.Show("Done Tomorrow");
+                return;
+            }
+
             var menuItem = sender as MenuItem;
             if (menuItem == null) return;
             var obj = ((ContextMenu)menuItem.Parent).PlacementTarget as StackPanel;
@@ -47,6 +54,13 @@ namespace Nepholo.View.Body
 
         private void Save(object sender, RoutedEventArgs e)
         {
+            var b = BoolBlock.Tag as bool? ?? false;
+            if (b)
+            {
+                MessageBox.Show("Done Tomorrow");
+                return;
+            }
+
             // string path = Environment.SpecialFolder.UserProfile + @"\Downloads";
             var menuItem = sender as MenuItem;
             if (menuItem == null) return;
@@ -62,6 +76,13 @@ namespace Nepholo.View.Body
 
         private void SaveTo(object sender, RoutedEventArgs e)
         {
+            var b = BoolBlock.Tag as bool? ?? false;
+            if (b)
+            {
+                MessageBox.Show("Done Tomorrow");
+                return;
+            }
+
             var menuItem = sender as MenuItem;
             if (menuItem == null) return;
             var obj = ((ContextMenu)menuItem.Parent).PlacementTarget as StackPanel;
@@ -79,6 +100,13 @@ namespace Nepholo.View.Body
 
         private void Delete(object sender, RoutedEventArgs e)
         {
+            var b = BoolBlock.Tag as bool? ?? false;
+            if (b)
+            {
+                MessageBox.Show("Done Tomorrow");
+                return;
+            }
+
             var menuItem = sender as MenuItem;
             if (menuItem == null) return;
             var obj = ((ContextMenu)menuItem.Parent).PlacementTarget as StackPanel;
