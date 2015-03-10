@@ -27,10 +27,12 @@ namespace Nepholo.Plugin.Cloud
         void Deconnect();
 
         // Download something
-        void Download(string id, string name);
+        Task Download(string id, string name);
 
         // Upload something
-        void Upload(string id, string name);
+        Task Upload(string id, string name);
+
+        Task Delete(string id);
 
         // List root folder's content
         Task<List<File>> GetRoot();

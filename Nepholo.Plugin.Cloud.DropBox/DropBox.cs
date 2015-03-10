@@ -76,42 +76,65 @@ namespace Nepholo.Plugin.Cloud.DropBox
             throw new NotImplementedException();
         }
 
-        public void Download(string id, string name)
+        public Task Download(string id, string name)
         {
-            _client.GetFileAsync(id,
-            async response =>
+            return Task.Run(() =>
             {
-                using (var sourceStream = new FileStream(name,
-                    FileMode.Append, FileAccess.Write, FileShare.None,
-                    bufferSize: 4096, useAsync: true))
-                {
-                    var encodedText = Encoding.Unicode.GetBytes(response.Content);
-                    await sourceStream.WriteAsync(encodedText, 0, encodedText.Length);
-                }
-            },
-            error =>
-            {
-                Debug.WriteLine(error.Message);
-                //Do something on error
-            });
-        }
-
-        public void Upload(string id, string name)
-        {
-            using (var fileStream = System.IO.File.OpenRead(name))
-            {
-                //var uploaded = _client.UploadFile(id, System.IO.Path.GetFileName(name), fileStream);
-                _client.UploadFileAsync(id, System.IO.Path.GetFileName(name), fileStream,
-                    response =>
+                _client.GetFileAsync(id,
+                    async response =>
                     {
-                        //Do something with response
+                        using (var sourceStream = new FileStream(name,
+                            FileMode.Append, FileAccess.Write, FileShare.None,
+                            bufferSize: 4096, useAsync: true))
+                        {
+                            var encodedText = Encoding.Unicode.GetBytes(response.Content);
+                            await sourceStream.WriteAsync(encodedText, 0, encodedText.Length);
+                        }
                     },
                     error =>
                     {
                         Debug.WriteLine(error.Message);
                         //Do something on error
                     });
-            }
+            });
+        }
+
+        public Task Upload(string id, string name)
+        {
+            return Task.Run(() =>
+            {
+                using (var fileStream = System.IO.File.OpenRead(name))
+                {
+                    //var uploaded = _client.UploadFile(id, System.IO.Path.GetFileName(name), fileStream);
+                    _client.UploadFileAsync(id, Path.GetFileName(name), fileStream,
+                        response =>
+                        {
+                            //Do something with response
+                        },
+                        error =>
+                        {
+                            Debug.WriteLine(error.Message);
+                            //Do something on error
+                        });
+                }
+            });
+        }
+
+        public Task Delete(string id)
+        {
+            return Task.Run(() =>
+            {
+                _client.DeleteAsync(id,
+                    response =>
+                    {
+                        //Do something
+                    },
+                    error =>
+                    {
+                        Debug.WriteLine(error.Message);
+                        //Do something on error
+                    });
+            });
         }
 
         public Task<List<File>> GetRoot()

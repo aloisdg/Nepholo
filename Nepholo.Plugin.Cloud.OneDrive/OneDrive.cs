@@ -71,7 +71,7 @@ namespace Nepholo.Plugin.Cloud.OneDrive
             throw new NotImplementedException();
         }
 
-        public async void Download(string id, string name)
+        public async Task Download(string id, string name)
         {
             using (var fileStream = System.IO.File.OpenWrite(name))
             {
@@ -80,13 +80,18 @@ namespace Nepholo.Plugin.Cloud.OneDrive
             }
         }
 
-        public async void Upload(string id, string name)
+        public async Task Upload(string id, string name)
         {
             using (var fileStream = System.IO.File.OpenRead(name))
             {
                 await _client.UploadAsync(id, fileStream, Name);
             }
         }
+
+        public async Task Delete(string id)
+        {
+            await _client.DeleteAsync(id);
+        } 
 
         public async Task<List<File>> GetRoot()
         {
