@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
 
 namespace Nepholo.View.Body
@@ -40,7 +30,7 @@ namespace Nepholo.View.Body
             if (menuItem == null) return;
             var obj = ((ContextMenu)menuItem.Parent).PlacementTarget as StackPanel;
             if (obj == null) return;
-            var name = System.IO.Path.Combine(System.IO.Path.GetTempPath(), TextName.Text);
+            var name = Path.Combine(Path.GetTempPath(), TextName.Text);
 
             App.Cloud.Download(obj.Tag.ToString(), name).Wait();
             Console.WriteLine(name);
@@ -67,7 +57,7 @@ namespace Nepholo.View.Body
             var obj = ((ContextMenu)menuItem.Parent).PlacementTarget as StackPanel;
             if (obj == null) return;
 
-            var name = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), TextName.Text);
+            var name = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), TextName.Text);
 
             App.Cloud.Download(obj.Tag.ToString(), name).Wait();
             Console.WriteLine(name);
