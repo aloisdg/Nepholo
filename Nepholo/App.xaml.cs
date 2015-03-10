@@ -9,7 +9,7 @@ namespace Nepholo
     /// </summary>
     public partial class App : Application
     {
-        public static ObservableCollection<Nepholo.Model.Account> Accounts { get; set; }
+        public static ObservableCollection<Account> Accounts { get; set; }
         public static ICloud Cloud { get; set; }
 
         protected override void OnStartup(StartupEventArgs e)
