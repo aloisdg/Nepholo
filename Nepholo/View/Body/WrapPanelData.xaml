@@ -23,5 +23,15 @@
         </TextBlock>
         <TextBlock Text="{Binding Size, Mode=OneWay}" FontSize="12" Foreground="{StaticResource LightGrey}"
                    Visibility="{Binding Is_Dir, Mode=OneWay, Converter={StaticResource VisibilityConverter}}" />
+        <StackPanel.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Open" Click="Open" />
+                <MenuItem Header="Look" Click="Look" />
+                <MenuItem Header="Save" Click="Save" />
+                <MenuItem Header="Save To" Click="SaveTo" />
+                <MenuItem Header="Delete" Click="Delete" />
+            </ContextMenu>
+        </StackPanel.ContextMenu>
     </StackPanel>
+    
 </UserControl>

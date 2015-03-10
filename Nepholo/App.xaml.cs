@@ -1,11 +1,6 @@
-﻿using MahApps.Metro;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
+using Nepholo.Plugin.Cloud;
 
 namespace Nepholo
 {
@@ -14,8 +9,13 @@ namespace Nepholo
     /// </summary>
     public partial class App : Application
     {
+        public static ObservableCollection<Nepholo.Model.Account> Accounts { get; set; }
+        public static ICloud Cloud { get; set; }
+
         protected override void OnStartup(StartupEventArgs e)
         {
+            Accounts = Nepholo.Model.Helper.DeserializeFromXmlFile<ObservableCollection<Nepholo.Model.Account>>("accounts.xml");
+
             //// add custom accent and theme resource dictionaries
             //ThemeManager.AddAccent("CustomAccent1", new Uri("pack://application:,,,/MahAppsMetroThemesSample;component/View/Theme.xaml"));
 

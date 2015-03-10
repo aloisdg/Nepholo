@@ -5,7 +5,7 @@
     xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:custom="http://metro.mahapps.com/winfx/xaml/shared"
     xmlns:view="clr-namespace:Nepholo.View"
-    x:Class="Nepholo.MainWindow"
+    x:Class="Nepholo.MainWindow" Closing="CloseApp"
     Title="Nepholo" MinHeight="360" MinWidth="640" Height="360" Width="640" WindowTransitionsEnabled="True" >
 
     <controls:MetroWindow.IconTemplate>
@@ -325,7 +325,9 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <body:WrapPanelData Width="160" Height="200" Margin="10,10,0,0" />
+                                <Grid> 
+                                    <body:WrapPanelData Width="160" Height="200" Margin="10,10,0,0" />
+                                </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

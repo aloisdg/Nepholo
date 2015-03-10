@@ -13,8 +13,10 @@ using System.Windows.Navigation;
 using DropNet;
 using DropNet.Models;
 using MahApps.Metro.Controls;
+using Nepholo.Model;
 using Nepholo.Plugin.Cloud;
 using Nepholo.Properties;
+using Account = Nepholo.Model.Account;
 using File = Nepholo.Plugin.Cloud.File;
 
 namespace Nepholo
@@ -45,7 +47,6 @@ namespace Nepholo
         public IEnumerable<Lazy<ICloud>> GetICloud { get; set; }
 
         private IEnumerable<ICloud> _cloudType;
-        private ICloud _cloud;
         private Window _window;
 
         public MainWindow()
@@ -96,7 +97,7 @@ namespace Nepholo
         private async void SwitchCloud()
         {
             IsEnabled = false;
-            var url = await _cloud.GetOAuthToken();
+            var url = await App.Cloud.GetOAuthToken();
 
             var wb = new WebBrowser();
             wb.LoadCompleted += wb_LoadCompleted;
@@ -119,7 +120,7 @@ namespace Nepholo
         private async void wb_LoadCompleted(object sender, NavigationEventArgs e)
         {
             if (!e.Uri.Host.Contains("github")) return;
-            await _cloud.Create(e.Uri.Query);
+            await App.Cloud.Create(e.Uri.Query);
             Console.WriteLine("token ok");
             GetTree(null);
             DisplayContents(null);
@@ -135,18 +136,22 @@ namespace Nepholo
 
         private async void AddAccount()
         {
-            var a = await _cloud.Identify();
+            var a = await App.Cloud.Identify();
             Console.WriteLine(a.Email);
-            //App.Accounts.Add(a);
+            App.Accounts.Add(new Account
+            {
+                Email = a.Email, Name = a.Name, Storage = a.Storage,
+                AccessToken = String.Empty , Token = String.Empty
+            });
         }
 
         private async void GetTree(string path, ItemsControl item = null)
         {
             List<File> list;
             if (String.IsNullOrWhiteSpace(path))
-                list = await _cloud.GetRoot();
+                list = await App.Cloud.GetRoot();
             else
-                list = await _cloud.GetFolder(path);
+                list = await App.Cloud.GetFolder(path);
 
             InitTree(list.Where(f => f.IsFolder), item);
         }
@@ -155,9 +160,9 @@ namespace Nepholo
         {
             List<File> list;
             if (String.IsNullOrWhiteSpace(path))
-                list = await _cloud.GetRoot();
+                list = await App.Cloud.GetRoot();
             else
-                list = await _cloud.GetFolder(path);
+                list = await App.Cloud.GetFolder(path);
             if (list != null)
                 ItemListBox.ItemsSource = SortContents(list);
         }
@@ -218,8 +223,13 @@ namespace Nepholo
         {
             var box = CloudBox as ComboBox;
             if (box == null) return;
-            _cloud = _cloudType.First(c => c.Name.Equals(box.SelectedItem as string));
+            App.Cloud = _cloudType.First(c => c.Name.Equals(box.SelectedItem as string));
             SwitchCloud();
+        }
+
+        private void CloseApp(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Model.Helper.SerializeToXmlFile<ObservableCollection<Nepholo.Model.Account>>("accounts.xml", App.Accounts);
         }
     }
 }
