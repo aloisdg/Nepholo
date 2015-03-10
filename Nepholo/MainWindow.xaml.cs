@@ -124,8 +124,11 @@ namespace Nepholo
         private async void wb_LoadCompleted(object sender, NavigationEventArgs e)
         {
             if (!e.Uri.Host.Contains("github")) return;
-            await App.Cloud.Create(e.Uri.Query);
+            var tokens = await App.Cloud.Create(e.Uri.Query);
             Console.WriteLine("token ok");
+
+            AddAccount(tokens);
+
             ShowFiles();
             _window.Close();
         }
@@ -139,14 +142,13 @@ namespace Nepholo
         private void w_Closing(object sender, CancelEventArgs e)
         {
             IsEnabled = true;
-
-            AddAccount();
         }
 
-        private static async void AddAccount()
+        private static async void AddAccount(Tokens token)
         {
             var a = await App.Cloud.Identify();
             Console.WriteLine(a.Email);
+            a.Tokens = token;
             App.Accounts.Add(a);
         }
 
