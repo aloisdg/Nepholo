@@ -1,6 +1,6 @@
-﻿namespace Nepholo.Model
+﻿namespace Nepholo.Plugin.Cloud
 {
-    public class Account : Plugin.Cloud.Account
+    public class Tokens
     {
         public string AccessToken { get; set; }
         public string Token { get; set; }

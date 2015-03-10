@@ -17,7 +17,6 @@ using MahApps.Metro.Controls;
 using Nepholo.Model;
 using Nepholo.Plugin.Cloud;
 using Nepholo.Properties;
-using Account = Nepholo.Model.Account;
 using File = Nepholo.Plugin.Cloud.File;
 
 namespace Nepholo
@@ -230,7 +229,7 @@ namespace Nepholo
 
         private void CloseApp(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Model.Helper.SerializeToXmlFile<ObservableCollection<Nepholo.Model.Account>>("accounts.xml", App.Accounts);
+            Helper.SerializeToXmlFile("accounts.xml", App.Accounts);
         }
 
         private void UIElement_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)

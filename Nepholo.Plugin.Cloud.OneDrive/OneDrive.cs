@@ -50,20 +50,20 @@ namespace Nepholo.Plugin.Cloud.OneDrive
             });
         }
 
-        public async Task Create(string url)
+        public async Task<Tokens> Create(string url)
         {
             var authCode = (HttpUtility.ParseQueryString(url)).Get("code");
 
             // Exchange the Authorization Code with Access/Refresh tokens
-            var token = await _client.GetAccessTokenAsync(authCode);
+            var tokens = await _client.GetAccessTokenAsync(authCode);
+            return new Tokens { AccessToken = tokens.Access_Token, Token = tokens.Refresh_Token };
         }
 
-        public void Connect()
+        public void Connect(Tokens token)
         {
             // Initialize a new Client, this time by providing previously requested Access/Refresh tokens
             // var client2 = new Client(clientId, clientSecret, callbackUrl, token.Access_Token, token.Refresh_Token);
-
-            throw new NotImplementedException();
+            throw new NotImplementedException(); 
         }
 
         public void Deconnect()
@@ -91,7 +91,7 @@ namespace Nepholo.Plugin.Cloud.OneDrive
         public async Task Delete(string id)
         {
             await _client.DeleteAsync(id);
-        } 
+        }
 
         public async Task<List<File>> GetRoot()
         {

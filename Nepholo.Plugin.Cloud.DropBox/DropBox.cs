@@ -6,12 +6,13 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using DropNet;
+using DropNet.Models;
 
 namespace Nepholo.Plugin.Cloud.DropBox
 {
     public class DropBox : ICloud
     {
-        private readonly DropNetClient _client =
+        private DropNetClient _client =
             new DropNetClient(ApiKeys.DropKey, ApiKeys.DropSecret) { UseSandbox = false };
 
         public string Name
@@ -34,12 +35,13 @@ namespace Nepholo.Plugin.Cloud.DropBox
             });
         }
 
-        public Task Create(string url)
+        public Task<Tokens> Create(string url)
         {
             return Task.Run(() =>
             {
                 var accessToken = _client.GetAccessToken();
                 _client.UserLogin = accessToken;
+                return new Tokens { AccessToken = accessToken.Token, Token = accessToken.Secret };
             });
             //// step 3
             //_client.GetAccessTokenAsync((accessToken) =>
@@ -52,23 +54,25 @@ namespace Nepholo.Plugin.Cloud.DropBox
             //});
         }
 
-        public void Connect()
+        public void Connect(Tokens tokens)
         {
-            _client.GetAccessTokenAsync(userLogin =>
-            {
-                //if ((MessageBox.Show("Save password?", "Important Question", MessageBoxButton.YesNo)) == MessageBoxResult.Yes)
-                //{
-                //    Settings.Default.Token = userLogin.Token;
-                //    Settings.Default.Secret = userLogin.Secret;
-                //    Settings.Default.Save();
-                //}
-                //GetTree("/");
-                //DisplayContents("/");
-            },
-            error =>
-            {
-                Console.WriteLine(error.Message);
-            });
+            //_client.GetAccessTokenAsync(userLogin =>
+            //{
+            //    //if ((MessageBox.Show("Save password?", "Important Question", MessageBoxButton.YesNo)) == MessageBoxResult.Yes)
+            //    //{
+            //    //    Settings.Default.Token = userLogin.Token;
+            //    //    Settings.Default.Secret = userLogin.Secret;
+            //    //    Settings.Default.Save();
+            //    //}
+            //    //GetTree("/");
+            //    //DisplayContents("/");
+            //},
+            //error =>
+            //{
+            //    Console.WriteLine(error.Message);
+            //});
+
+            _client.UserLogin = new UserLogin { Token = tokens.AccessToken, Secret = tokens.Token };
         }
 
         public void Deconnect()
