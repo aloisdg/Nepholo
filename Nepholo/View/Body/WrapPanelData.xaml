@@ -12,17 +12,17 @@
         <converter:BoolToVisibilityConverter x:Key="VisibilityConverter" />
     </UserControl.Resources>
 
-    <StackPanel Background="White">
+    <StackPanel Background="White" Tag="{Binding Id}">
         <Grid Height="160">
             <Image Source="{Binding Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" Height="128" Width="128" />
         </Grid>
         <TextBlock FontSize="18" Foreground="{StaticResource DarkGrey}">
-            <Run Text="{Binding Name, Mode=OneWay}" />
+            <Run x:Name="TextName" Text="{Binding Name, Mode=OneWay}" />
             <!--<Run Text="{Binding Is_Dir, Mode=OneWay, Converter={StaticResource DotConverter}}" />
             <Run Text="{Binding Extension, Mode=OneWay}" />-->
         </TextBlock>
         <TextBlock Text="{Binding Size, Mode=OneWay}" FontSize="12" Foreground="{StaticResource LightGrey}"
-                   Visibility="{Binding Is_Dir, Mode=OneWay, Converter={StaticResource VisibilityConverter}}" />
+                   Visibility="{Binding Size, Mode=OneWay, Converter={StaticResource VisibilityConverter}}" />
         <StackPanel.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Open" Click="Open" />
