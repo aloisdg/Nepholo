@@ -32,6 +32,7 @@ namespace Nepholo.Plugin.Cloud
         // Upload something
         Task Upload(string id, string name);
 
+        // Delete something
         Task Delete(string id);
 
         // List root folder's content
