@@ -6,17 +6,13 @@ using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
-using DropNet;
-using DropNet.Models;
 using MahApps.Metro.Controls;
 using Nepholo.Model;
 using Nepholo.Plugin.Cloud;
-using Nepholo.Properties;
 using File = Nepholo.Plugin.Cloud.File;
 
 namespace Nepholo
@@ -96,16 +92,24 @@ namespace Nepholo
 
         private async void SwitchCloud()
         {
-            IsEnabled = false;
-            var url = await App.Cloud.GetOAuthToken();
+            if (App.Accounts.Any())
+            {
+                App.Cloud.Connect(App.Accounts.First().Tokens);
+                ShowFiles();
+            }
+            else
+            {
+                IsEnabled = false;
+                var url = await App.Cloud.GetOAuthToken();
 
-            var wb = new WebBrowser();
-            wb.LoadCompleted += wb_LoadCompleted;
-            wb.Navigate(url);
+                var wb = new WebBrowser();
+                wb.LoadCompleted += wb_LoadCompleted;
+                wb.Navigate(url);
 
-            _window = new Window { ShowInTaskbar = false, Title = "Authentification", Content = wb, Owner = this};
-            _window.Closing += w_Closing;
-            _window.Show();
+                _window = new Window { ShowInTaskbar = false, Title = "Authentification", Content = wb, Owner = this };
+                _window.Closing += w_Closing;
+                _window.Show();
+            }
         }
 
         private void FillClouds()
@@ -114,7 +118,6 @@ namespace Nepholo
 
             CloudBox.ItemsSource = _cloudType.Select(cloud => cloud.Name);
             CloudBox.SelectedIndex = 0;
-            //_cloud = _cloudType.Last();
         }
 
         private async void wb_LoadCompleted(object sender, NavigationEventArgs e)
@@ -122,9 +125,14 @@ namespace Nepholo
             if (!e.Uri.Host.Contains("github")) return;
             await App.Cloud.Create(e.Uri.Query);
             Console.WriteLine("token ok");
+            ShowFiles();
+            _window.Close();
+        }
+
+        private void ShowFiles()
+        {
             GetTree(null);
             DisplayContents(null);
-            _window.Close();
         }
 
         private void w_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -138,11 +146,7 @@ namespace Nepholo
         {
             var a = await App.Cloud.Identify();
             Console.WriteLine(a.Email);
-            App.Accounts.Add(new Account
-            {
-                Email = a.Email, Name = a.Name, Storage = a.Storage,
-                AccessToken = String.Empty , Token = String.Empty
-            });
+            App.Accounts.Add(a);
         }
 
         private async void GetTree(string path, ItemsControl item = null)
@@ -217,7 +221,7 @@ namespace Nepholo
             DisplayContents(temp.Tag.ToString());
         }
 
-        private void CloudBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) {}
+        private void CloudBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) { }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {

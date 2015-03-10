@@ -63,7 +63,7 @@ namespace Nepholo.Plugin.Cloud.OneDrive
         {
             // Initialize a new Client, this time by providing previously requested Access/Refresh tokens
             // var client2 = new Client(clientId, clientSecret, callbackUrl, token.Access_Token, token.Refresh_Token);
-            throw new NotImplementedException(); 
+            //throw new NotImplementedException(); 
         }
 
         public void Deconnect()

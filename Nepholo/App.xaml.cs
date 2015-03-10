@@ -14,7 +14,7 @@ namespace Nepholo
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            Accounts = Nepholo.Model.Helper.DeserializeFromXmlFile<ObservableCollection<Nepholo.Model.Account>>("accounts.xml");
+            Accounts = Model.Helper.DeserializeFromXmlFile<ObservableCollection<Account>>("accounts.xml");
 
             //// add custom accent and theme resource dictionaries
             //ThemeManager.AddAccent("CustomAccent1", new Uri("pack://application:,,,/MahAppsMetroThemesSample;component/View/Theme.xaml"));

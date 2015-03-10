@@ -21,7 +21,7 @@ namespace Nepholo.Plugin.Cloud
         Task<Tokens> Create(string url);
 
         // Initialize a new Client with nothing
-        void Connect();
+        void Connect(Tokens token);
 
         // Remove Token
         void Deconnect();
