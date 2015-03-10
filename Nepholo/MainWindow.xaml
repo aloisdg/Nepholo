@@ -272,7 +272,7 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </Grid>
-    
+
                 </Grid>
             </Grid>
 
@@ -315,7 +315,10 @@
                 <!--<Grid/>-->
             </Grid>
 
-            <Grid Grid.Row="1" Grid.Column="2">
+            <Grid Grid.Row="1" Grid.Column="2"
+                  Drop="DropList_Drop" 
+                  DragEnter="DropList_DragEnter" 
+                  AllowDrop="True">
                 <ScrollViewer>
                     <ItemsControl x:Name="ItemListBox" >
                         <ItemsControl.ItemsPanel>
@@ -325,7 +328,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid MouseLeftButtonUp="UIElement_OnMouseLeftButtonUp" Tag="{Binding Id}"> 
+                                <Grid MouseLeftButtonUp="UIElement_OnMouseLeftButtonUp" Tag="{Binding Id}">
                                     <body:WrapPanelData Width="160" Height="200" Margin="10,10,0,0" />
                                 </Grid>
                             </DataTemplate>

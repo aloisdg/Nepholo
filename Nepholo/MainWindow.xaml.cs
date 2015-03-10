@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using MahApps.Metro.Controls;
 using Nepholo.Model;
 using Nepholo.Plugin.Cloud;
+using RestSharp.Extensions;
 using File = Nepholo.Plugin.Cloud.File;
 
 namespace Nepholo
@@ -172,7 +173,10 @@ namespace Nepholo
             else
                 list = await App.Cloud.GetFolder(path);
             if (list != null)
+            {
                 ItemListBox.ItemsSource = SortContents(list);
+                ItemListBox.Tag = path; // add a const rootPath to ICloud.
+            }
         }
 
         private static IEnumerable<File> SortContents(IEnumerable<File> contents)
@@ -247,6 +251,31 @@ namespace Nepholo
             {
                 DisplayContents(grid.Tag.ToString());
             }
+        }
+
+        private void DropList_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                // Note that you can have more than one file.
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                // Assuming you have one file that you care about, pass it off to whatever
+                // handling code you have defined.
+
+                foreach (var file in files)
+                {
+                    App.Cloud.Upload(ItemListBox.Tag.ToString(), file);
+                }
+            }
+        }
+
+        private void DropList_DragEnter(object sender, DragEventArgs e)
+        {
+            //if (!e.Data.GetDataPresent(DataFormats.FileDrop) || sender == e.Source)
+            //{
+            //    e.Effects = DragDropEffects.None;
+            //}
         }
     }
 }
