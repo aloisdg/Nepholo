@@ -1,10 +1,1 @@
-## Done
-
-## Doing
-
-## To Do
-
-## Idea
-
-* Add Google Drive provider
-* 
+Just a repo for a school project.
